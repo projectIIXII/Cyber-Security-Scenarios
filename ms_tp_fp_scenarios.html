@@ -1,0 +1,2492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Microsoft Security Incident Scenarios — True vs False Positives (100)</title>
+<style>
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height: 1.55; margin: 0; }
+  header { background: #0a0f2c; color: #fff; padding: 24px; }
+  main { padding: 20px; max-width: 1100px; margin: auto; }
+  .meta { color: #cfd8ff; }
+  .notice { background: #f5f7ff; border-left: 4px solid #4c6fff; padding: 12px 16px; margin: 16px 0; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  .scenario { padding: 12px 16px; background: #fff; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .scenario.tp { border-left: 6px solid #16a34a; }
+  .scenario.fp { border-left: 6px solid #ef4444; }
+  details summary { cursor: pointer; }
+  pre { background: #0f172a; color: #e2e8f0; padding: 12px; border-radius: 8px; overflow:auto; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 0.9em; }
+  nav.toc { margin: 20px 0; padding: 16px; background: #fff; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  nav.toc ul { columns: 4; -webkit-columns:4; -moz-columns:4; gap: 8px; }
+  nav.toc li { list-style: none; margin: 6px 0; }
+  nav.toc a { text-decoration: none; color: #1d4ed8; }
+  footer { color: #475569; padding: 24px; text-align:center; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Microsoft Security Incident Scenarios — True vs False Positives</h1>
+  <p class="meta">100 realistic, Microsoft tools–based scenarios (MDE, MDO, Sentinel, MDI, MDCA) for training agents to distinguish True vs False Positives.</p>
+</header>
+<main>
+  <div class="notice">
+    <strong>How to use:</strong> Each scenario contains Tool, Alert, Evidence, a KQL investigation snippet, Context, Classification, Reason, Remediation, and Prevention.
+    This site structure is <em>two levels deep</em> (single page with anchors) to accommodate crawlers with depth limits.
+  </div>
+  <nav class="toc">
+    <h2>Table of Contents</h2>
+    <ul>
+      <li><a href="#scenario-001">Scenario 001</a></li>
+<li><a href="#scenario-002">Scenario 002</a></li>
+<li><a href="#scenario-003">Scenario 003</a></li>
+<li><a href="#scenario-004">Scenario 004</a></li>
+<li><a href="#scenario-005">Scenario 005</a></li>
+<li><a href="#scenario-006">Scenario 006</a></li>
+<li><a href="#scenario-007">Scenario 007</a></li>
+<li><a href="#scenario-008">Scenario 008</a></li>
+<li><a href="#scenario-009">Scenario 009</a></li>
+<li><a href="#scenario-010">Scenario 010</a></li>
+<li><a href="#scenario-011">Scenario 011</a></li>
+<li><a href="#scenario-012">Scenario 012</a></li>
+<li><a href="#scenario-013">Scenario 013</a></li>
+<li><a href="#scenario-014">Scenario 014</a></li>
+<li><a href="#scenario-015">Scenario 015</a></li>
+<li><a href="#scenario-016">Scenario 016</a></li>
+<li><a href="#scenario-017">Scenario 017</a></li>
+<li><a href="#scenario-018">Scenario 018</a></li>
+<li><a href="#scenario-019">Scenario 019</a></li>
+<li><a href="#scenario-020">Scenario 020</a></li>
+<li><a href="#scenario-021">Scenario 021</a></li>
+<li><a href="#scenario-022">Scenario 022</a></li>
+<li><a href="#scenario-023">Scenario 023</a></li>
+<li><a href="#scenario-024">Scenario 024</a></li>
+<li><a href="#scenario-025">Scenario 025</a></li>
+<li><a href="#scenario-026">Scenario 026</a></li>
+<li><a href="#scenario-027">Scenario 027</a></li>
+<li><a href="#scenario-028">Scenario 028</a></li>
+<li><a href="#scenario-029">Scenario 029</a></li>
+<li><a href="#scenario-030">Scenario 030</a></li>
+<li><a href="#scenario-031">Scenario 031</a></li>
+<li><a href="#scenario-032">Scenario 032</a></li>
+<li><a href="#scenario-033">Scenario 033</a></li>
+<li><a href="#scenario-034">Scenario 034</a></li>
+<li><a href="#scenario-035">Scenario 035</a></li>
+<li><a href="#scenario-036">Scenario 036</a></li>
+<li><a href="#scenario-037">Scenario 037</a></li>
+<li><a href="#scenario-038">Scenario 038</a></li>
+<li><a href="#scenario-039">Scenario 039</a></li>
+<li><a href="#scenario-040">Scenario 040</a></li>
+<li><a href="#scenario-041">Scenario 041</a></li>
+<li><a href="#scenario-042">Scenario 042</a></li>
+<li><a href="#scenario-043">Scenario 043</a></li>
+<li><a href="#scenario-044">Scenario 044</a></li>
+<li><a href="#scenario-045">Scenario 045</a></li>
+<li><a href="#scenario-046">Scenario 046</a></li>
+<li><a href="#scenario-047">Scenario 047</a></li>
+<li><a href="#scenario-048">Scenario 048</a></li>
+<li><a href="#scenario-049">Scenario 049</a></li>
+<li><a href="#scenario-050">Scenario 050</a></li>
+<li><a href="#scenario-051">Scenario 051</a></li>
+<li><a href="#scenario-052">Scenario 052</a></li>
+<li><a href="#scenario-053">Scenario 053</a></li>
+<li><a href="#scenario-054">Scenario 054</a></li>
+<li><a href="#scenario-055">Scenario 055</a></li>
+<li><a href="#scenario-056">Scenario 056</a></li>
+<li><a href="#scenario-057">Scenario 057</a></li>
+<li><a href="#scenario-058">Scenario 058</a></li>
+<li><a href="#scenario-059">Scenario 059</a></li>
+<li><a href="#scenario-060">Scenario 060</a></li>
+<li><a href="#scenario-061">Scenario 061</a></li>
+<li><a href="#scenario-062">Scenario 062</a></li>
+<li><a href="#scenario-063">Scenario 063</a></li>
+<li><a href="#scenario-064">Scenario 064</a></li>
+<li><a href="#scenario-065">Scenario 065</a></li>
+<li><a href="#scenario-066">Scenario 066</a></li>
+<li><a href="#scenario-067">Scenario 067</a></li>
+<li><a href="#scenario-068">Scenario 068</a></li>
+<li><a href="#scenario-069">Scenario 069</a></li>
+<li><a href="#scenario-070">Scenario 070</a></li>
+<li><a href="#scenario-071">Scenario 071</a></li>
+<li><a href="#scenario-072">Scenario 072</a></li>
+<li><a href="#scenario-073">Scenario 073</a></li>
+<li><a href="#scenario-074">Scenario 074</a></li>
+<li><a href="#scenario-075">Scenario 075</a></li>
+<li><a href="#scenario-076">Scenario 076</a></li>
+<li><a href="#scenario-077">Scenario 077</a></li>
+<li><a href="#scenario-078">Scenario 078</a></li>
+<li><a href="#scenario-079">Scenario 079</a></li>
+<li><a href="#scenario-080">Scenario 080</a></li>
+<li><a href="#scenario-081">Scenario 081</a></li>
+<li><a href="#scenario-082">Scenario 082</a></li>
+<li><a href="#scenario-083">Scenario 083</a></li>
+<li><a href="#scenario-084">Scenario 084</a></li>
+<li><a href="#scenario-085">Scenario 085</a></li>
+<li><a href="#scenario-086">Scenario 086</a></li>
+<li><a href="#scenario-087">Scenario 087</a></li>
+<li><a href="#scenario-088">Scenario 088</a></li>
+<li><a href="#scenario-089">Scenario 089</a></li>
+<li><a href="#scenario-090">Scenario 090</a></li>
+<li><a href="#scenario-091">Scenario 091</a></li>
+<li><a href="#scenario-092">Scenario 092</a></li>
+<li><a href="#scenario-093">Scenario 093</a></li>
+<li><a href="#scenario-094">Scenario 094</a></li>
+<li><a href="#scenario-095">Scenario 095</a></li>
+<li><a href="#scenario-096">Scenario 096</a></li>
+<li><a href="#scenario-097">Scenario 097</a></li>
+<li><a href="#scenario-098">Scenario 098</a></li>
+<li><a href="#scenario-099">Scenario 099</a></li>
+<li><a href="#scenario-100">Scenario 100</a></li>
+    </ul>
+  </nav>
+  <section class="grid">
+    
+<section id="scenario-001" class="scenario tp">
+  <h2>Scenario 001 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> Suspicious PowerShell command detected <em>(Alert ID: MDE-9935-001)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-001D, User: user4@contoso.com, SrcIP: 20.4.4.140, Location: USA, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>PowerShell with obfuscation flags (-nop -w hidden -enc)</li><li>Network connection to known malicious IP</li><li>Child process: cmd.exe -> powershell.exe -> rundll32.exe</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceProcessEvents
+| where FileName =~ "powershell.exe" and ProcessCommandLine has_any ("-enc","-nop")
+| join kind=leftouter (DeviceNetworkEvents | where RemoteUrl has_any ("pastebin","bit.ly") or RemoteIP in ("185.199.110.153")) on DeviceId, InitiatingProcessId
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> User opened invoice.docm from external email; macro spawned obfuscated PowerShell that downloaded payload.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Matches known ransomware loader TTPs (T1059.001, T1105). Post-event beacons to C2 observed.</p>
+  <p><strong>Remediation:</strong> Isolated device via MDE, blocked indicators, initiated full AV scan, rotated credentials, and restored from backup.</p>
+  <p><strong>Prevention:</strong> Harden Office macro policies; enable ASR rules to block Office child processes; implement safe-links.</p>
+  <hr/>
+</section>
+
+<section id="scenario-002" class="scenario tp">
+  <h2>Scenario 002 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> Multiple failed MFA prompts followed by successful sign-in <em>(Alert ID: Sentinel-9279-002)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0017, User: user76@contoso.com, SrcIP: 20.4.6.140, Location: India, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Unusual MFA push frequency (over 20 in 10 minutes)</li><li>Successful sign-in from previously unseen IP/asn</li><li>Risky sign-in flagged by Entra ID Protection</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>SigninLogs
+| where ResultType == "0" or ResultType == 0
+| extend IsNewIP = iff(ClientIP notin (todynamic(PreviousIPs)), true, false)
+| where IsNewIP and AuthenticationRequirement =~ "multiFactorAuthentication"
+| summarize count() by UserPrincipalName, bin(TimeGenerated, 5m)</code></pre>
+  </details>
+  <p><strong>Context:</strong> User reported MFA fatigue; attacker obtained password via phishing and spammed MFA until user approved.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Chain of events and telemetry indicate account takeover via MFA fatigue attack.</p>
+  <p><strong>Remediation:</strong> Reset password, revoke refresh tokens, force sign-out, register phishing-resistant MFA, review mailbox rules.</p>
+  <p><strong>Prevention:</strong> Enable number matching; conditional access with sign-in risk; implement phishing-resistant methods (FIDO2).</p>
+  <hr/>
+</section>
+
+<section id="scenario-003" class="scenario tp">
+  <h2>Scenario 003 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Identity</p>
+  <p><strong>Alert:</strong> Pass-the-Hash attack detected <em>(Alert ID: MDI-1106-003)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0007, User: user72@contoso.com, SrcIP: 20.4.3.130, Location: Australia, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Abnormal NTLM authentication patterns</li><li>Lateral movement to multiple servers within minutes</li><li>Mismatch between device used and typical user workstation</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>// Investigate suspicious NTLM authentications via Sentinel
+SecurityAlert
+| where ProductName == "Azure Advanced Threat Protection"
+| where Title has "Pass-the-Hash"
+| project TimeGenerated, Entities</code></pre>
+  </details>
+  <p><strong>Context:</strong> Service account hash reused from compromised endpoint; rapid admin share access attempts observed.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Classic PtH behavior with credential reuse, anomalous device, and lateral movement sequence (T1550.002).</p>
+  <p><strong>Remediation:</strong> Invalidate Kerberos tickets, rotate service account credentials, isolate compromised host, enable SMB signing.</p>
+  <p><strong>Prevention:</strong> Enforce tiered admin model; restrict lateral movement; deploy LAPS/Privileged Access Workstations.</p>
+  <hr/>
+</section>
+
+<section id="scenario-004" class="scenario tp">
+  <h2>Scenario 004 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Malicious OAuth app consented by user <em>(Alert ID: MDCA-2674-004)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0029, User: user90@contoso.com, SrcIP: 20.4.6.140, Location: UAE, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>New OAuth app with high-permission scopes (Mail.ReadWrite, Files.ReadWrite.All)</li><li>Consent granted outside business hours</li><li>Suspicious publisher with no verified publisher status</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where ActionType == "OAuth2PermissionGrantAdded"
+| extend Scopes = tostring(parse_json(RawEventData).Scopes)
+| where Scopes has_any ("Mail.ReadWrite","Files.ReadWrite.All")</code></pre>
+  </details>
+  <p><strong>Context:</strong> User fell for consent phishing page that requested excessive Graph API permissions.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Token-based persistence observed; exfil via Graph API after consent.</p>
+  <p><strong>Remediation:</strong> Revoke app consent, audit auditLogs/directoryAudits, rotate OAuth secrets, investigate mailbox/OneDrive access.</p>
+  <p><strong>Prevention:</strong> Enforce publisher verification; consent policies; educate users on OAuth consent prompts.</p>
+  <hr/>
+</section>
+
+<section id="scenario-005" class="scenario tp">
+  <h2>Scenario 005 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> RDP from TOR exit node followed by suspicious process execution <em>(Alert ID: Sentinel-8527-005)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0018, User: user49@contoso.com, SrcIP: 20.4.2.60, Location: UAE, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>RDP login from IP in TOR exit node list</li><li>Immediate execution of adfind.exe and net.exe enumeration</li><li>Creation of new local admin user</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>Heartbeat
+| join kind=inner (SigninLogs | where AppDisplayName =~ "Azure Windows Sign-In") on Computer
+| join kind=inner (ThreatIntelligenceIndicator | where Description has "TOR") on $left.ClientIP == $right.NetworkIP
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> Exposed RDP service allowed inbound connections; attacker began recon immediately post-login.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Sequence of TOR sign-in + recon tooling is indicative of intrusion, not admin activity.</p>
+  <p><strong>Remediation:</strong> Disable external RDP, enforce VPN, remove rogue admin, hunt for persistence, rotate creds.</p>
+  <p><strong>Prevention:</strong> Just-in-time access; network layer filtering; restrict RDP via conditional access and Azure Bastion.</p>
+  <hr/>
+</section>
+
+<section id="scenario-006" class="scenario tp">
+  <h2>Scenario 006 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Office 365</p>
+  <p><strong>Alert:</strong> Malware delivered via Teams message link <em>(Alert ID: MDO-6925-006)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-008A, User: user16@contoso.com, SrcIP: 20.4.6.20, Location: UK, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Safe Links rewrote URL; post-click sandbox detonated file with high confidence malware verdict</li><li>Attachment hash matched known campaign</li><li>Secondary callback to known C2 domain</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>EmailUrlInfo
+| where UrlDomain has "sharepoint" or UrlDomain has "onedrive"
+| join kind=leftouter (ThreatIntelligenceIndicator) on $left.Url == $right.NetworkDestinationUrl</code></pre>
+  </details>
+  <p><strong>Context:</strong> User clicked Teams message, downloaded ISO containing LNK leading to DLL sideloading.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Detonation + callback + sideload chain confirms malicious payload delivery.</p>
+  <p><strong>Remediation:</strong> Quarantine artifacts, block indicators, reimage endpoint, user coaching.</p>
+  <p><strong>Prevention:</strong> Restrict ISO/LNK downloads; Teams Safe Links; application control (WDAC).</p>
+  <hr/>
+</section>
+
+<section id="scenario-007" class="scenario tp">
+  <h2>Scenario 007 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> Suspicious service installed for persistence <em>(Alert ID: MDE-2307-007)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0094, User: user25@contoso.com, SrcIP: 20.4.1.180, Location: India, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>sc.exe create executed by non-admin user via UAC bypass</li><li>Service binary unsigned and living in user profile path</li><li>Service configured with restart-on-failure</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceProcessEvents
+| where FileName in ("sc.exe","services.exe")
+| where ProcessCommandLine has "create" and InitiatingProcessFileName != "services.exe"
+| project Timestamp, DeviceName, InitiatingProcessAccountName, ProcessCommandLine</code></pre>
+  </details>
+  <p><strong>Context:</strong> Post-exploitation persistence after initial phishing compromise.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Unsigned binary + user context + UAC bypass aligns with persistence T1543.003.</p>
+  <p><strong>Remediation:</strong> Remove service, delete binary, review autoruns, block hash, monitor re-creation.</p>
+  <p><strong>Prevention:</strong> Harden UAC; restrict service creation; enable ASR rules.</p>
+  <hr/>
+</section>
+
+<section id="scenario-008" class="scenario tp">
+  <h2>Scenario 008 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Office 365</p>
+  <p><strong>Alert:</strong> Mailbox forwarding rule to external domain <em>(Alert ID: MDO-3664-008)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-003C, User: user111@contoso.com, SrcIP: 20.4.2.70, Location: Australia, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>New-InboxRule forwarding to external gmail domain</li><li>Rule name matches common attacker pattern ('.' or 'Invoice')</li><li>User reported missing emails</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>OfficeActivity
+| where Operation == "New-InboxRule"
+| extend ForwardTo = tostring(Parameters[0].Value)
+| where ForwardTo contains "@gmail.com" or ForwardTo contains "@outlook.com" </code></pre>
+  </details>
+  <p><strong>Context:</strong> Account takeover used mailbox rules to exfiltrate and hide inbound security emails.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> External auto-forwarding with concealment; classic BEC TTP.</p>
+  <p><strong>Remediation:</strong> Remove rules, reset password, revoke tokens, notify partners, enable external forwarding block.</p>
+  <p><strong>Prevention:</strong> Conditional access, impossible travel detection, alert on new rules.</p>
+  <hr/>
+</section>
+
+<section id="scenario-009" class="scenario tp">
+  <h2>Scenario 009 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Identity</p>
+  <p><strong>Alert:</strong> Kerberoasting attempt detected <em>(Alert ID: MDI-3803-009)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-005F, User: user46@contoso.com, SrcIP: 20.4.3.160, Location: Singapore, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Abnormal spike in Kerberos service ticket requests (TGS)</li><li>Requests target SPNs with weak encryption types</li><li>Hashcat-style requests observed</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>SecurityAlert
+| where ProductName has "Defender for Identity" and Title has "Kerberoasting"
+| project TimeGenerated, Title, Description, Entities</code></pre>
+  </details>
+  <p><strong>Context:</strong> Attacker enumerating SPNs to crack service account hashes offline.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Clear TGS spam and weak cipher targeting.</p>
+  <p><strong>Remediation:</strong> Rotate service account passwords to 25+ chars, RC4 disabled, monitor DCs.</p>
+  <p><strong>Prevention:</strong> Managed service accounts; disable unconstrained delegation; enforce AES-only.</p>
+  <hr/>
+</section>
+
+<section id="scenario-010" class="scenario tp">
+  <h2>Scenario 010 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> Suspicious Azure automation account runbook modification <em>(Alert ID: Sentinel-4598-010)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0089, User: user94@contoso.com, SrcIP: 20.4.4.60, Location: Germany, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Runbook updated outside maintenance window</li><li>Webhook created to external endpoint</li><li>Execution frequency increased abruptly</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>AzureActivity
+| where OperationNameValue has "MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/RUNBOOKS/WRITE"
+| project TimeGenerated, Caller, ResourceGroup, Resource, ActivityStatusValue</code></pre>
+  </details>
+  <p><strong>Context:</strong> Cloud persistence via modified runbook to exfiltration endpoint.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Abuse of automation accounts for data exfil and scheduled tasks.</p>
+  <p><strong>Remediation:</strong> Revert runbook, rotate keys, remove webhooks, review RBAC, audit activity.</p>
+  <p><strong>Prevention:</strong> Privileged access policies; alert on webhook creation; change management.</p>
+  <hr/>
+</section>
+
+<section id="scenario-011" class="scenario fp">
+  <h2>Scenario 011 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Office 365</p>
+  <p><strong>Alert:</strong> Phishing email detected (lookalike domain) <em>(Alert ID: MDO-2084-011)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0054, User: user108@contoso.com, SrcIP: 20.4.1.150, Location: USA, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Domain similarity score high</li><li>New sender domain observed</li><li>URL rewrites by Safe Links</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>EmailEvents
+| where SenderFromDomain endswith "partner-newdomain.com"
+| summarize by SenderFromAddress</code></pre>
+  </details>
+  <p><strong>Context:</strong> Partner launched rebranded domain; SPF/DKIM/DMARC valid; no malware detected in detonation.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Legitimate sender with new domain; security controls triggered heuristics.</p>
+  <p><strong>Remediation:</strong> Allow-list domain via policy after verification; monitor briefly.</p>
+  <p><strong>Prevention:</strong> Maintain approved sender registry; communicate partner domain changes.</p>
+  <hr/>
+</section>
+
+<section id="scenario-012" class="scenario fp">
+  <h2>Scenario 012 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> Suspected port scan from vulnerability scanner <em>(Alert ID: MDE-8517-012)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0037, User: user117@contoso.com, SrcIP: 20.4.8.130, Location: UAE, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>High-rate TCP SYNs across multiple hosts</li><li>Nmap-like fingerprints in User-Agent</li><li>Activity within maintenance window</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceNetworkEvents
+| where InitiatingProcessFileName =~ "nmap.exe" or RemotePort in (22,3389,445,80,443)
+| summarize count() by DeviceName, InitiatingProcessAccountName</code></pre>
+  </details>
+  <p><strong>Context:</strong> Internal Qualys/Nessus scan during scheduled weekly assessment.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Authorized scanner IP and schedule; expected behavior.</p>
+  <p><strong>Remediation:</strong> None; document scanner exceptions in alert tuning.</p>
+  <p><strong>Prevention:</strong> Tune analytics to exclude scanner IP ranges.</p>
+  <hr/>
+</section>
+
+<section id="scenario-013" class="scenario fp">
+  <h2>Scenario 013 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> Impossible travel sign-in <em>(Alert ID: Sentinel-8019-013)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0025, User: user34@contoso.com, SrcIP: 20.4.2.170, Location: USA, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Sign-ins from India then UK within 10 minutes</li><li>GeoIP database drift noted</li><li>Both sessions via corporate VPN POPs</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>SigninLogs
+| extend Country = tostring(LocationDetails.countryOrRegion)
+| summarize makeset(Country) by UserPrincipalName, bin(TimeGenerated, 10m)</code></pre>
+  </details>
+  <p><strong>Context:</strong> User connected via split-tunnel VPN; geo appears different due to egress POPs.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Benign VPN artifact; device compliance and MFA healthy.</p>
+  <p><strong>Remediation:</strong> None; mark as FP; update detection to account for VPN ranges.</p>
+  <p><strong>Prevention:</strong> Add VPN egress IPs to named locations in Conditional Access.</p>
+  <hr/>
+</section>
+
+<section id="scenario-014" class="scenario fp">
+  <h2>Scenario 014 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> RDP brute force suspected on jump host <em>(Alert ID: MDE-2796-014)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0067, User: user47@contoso.com, SrcIP: 20.4.3.190, Location: Germany, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Multiple failed logons followed by success</li><li>Source IP from internal management subnet</li><li>Success via service account used by automation</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceLogonEvents
+| where ActionType in ("LogonFailed","LogonSuccess")
+| summarize Failed=countif(ActionType=="LogonFailed"), Success=countif(ActionType=="LogonSuccess") by DeviceName, AccountName, bin(Timestamp, 15m)</code></pre>
+  </details>
+  <p><strong>Context:</strong> Automated patching tool cycling credentials during rotation caused failures before success.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Planned maintenance activity; not malicious.</p>
+  <p><strong>Remediation:</strong> Tune to ignore service account auth storms during maintenance window.</p>
+  <p><strong>Prevention:</strong> Stagger rotations; improve tooling to reduce failures.</p>
+  <hr/>
+</section>
+
+<section id="scenario-015" class="scenario fp">
+  <h2>Scenario 015 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Suspicious OneDrive mass download <em>(Alert ID: MDCA-8668-015)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0028, User: user81@contoso.com, SrcIP: 20.4.3.30, Location: Australia, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>High-volume downloads from single user</li><li>Accessing many SharePoint sites</li><li>Downloads during normal hours</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where Application == "OneDrive"
+| summarize Downloads=count() by User, bin(TimeGenerated, 1h)</code></pre>
+  </details>
+  <p><strong>Context:</strong> New project migration; user was bulk-downloading approved data to work laptop.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Business-justified activity with ticket and manager approval.</p>
+  <p><strong>Remediation:</strong> None; document exception.</p>
+  <p><strong>Prevention:</strong> Temporary policy relaxation with DLP monitoring.</p>
+  <hr/>
+</section>
+
+<section id="scenario-016" class="scenario fp">
+  <h2>Scenario 016 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> Suspicious service creation <em>(Alert ID: MDE-5371-016)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0088, User: user33@contoso.com, SrcIP: 20.4.8.90, Location: India, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>sc.exe create observed</li><li>Binary unsigned in temp path</li><li>Executed by IT engineer during troubleshooting</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceProcessEvents
+| where FileName =~ "sc.exe" and ProcessCommandLine has "create"
+| project Timestamp, DeviceName, InitiatingProcessAccountName, ProcessCommandLine</code></pre>
+  </details>
+  <p><strong>Context:</strong> IT created a temporary diagnostic service to capture logs.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Legitimate admin action; change ticket found.</p>
+  <p><strong>Remediation:</strong> Close as FP; add admin tool path to allow list.</p>
+  <p><strong>Prevention:</strong> Admin activity tagging through PAW and change control.</p>
+  <hr/>
+</section>
+
+<section id="scenario-017" class="scenario fp">
+  <h2>Scenario 017 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Office 365</p>
+  <p><strong>Alert:</strong> Suspicious macro execution <em>(Alert ID: MDO-5315-017)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0058, User: user15@contoso.com, SrcIP: 20.4.4.190, Location: Australia, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Macro-enabled document opened</li><li>Child process spawn blocked by ASR</li><li>File came from internal SharePoint library</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>EmailAttachmentInfo
+| where FileType == "docm" or FileType == "xlsm"
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> Finance macro workbook with legitimate automation; ASR blocked but no malicious indicators.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Business macro; benign despite ASR trigger.</p>
+  <p><strong>Remediation:</strong> Create signed macro policy for finance templates.</p>
+  <p><strong>Prevention:</strong> Code-sign internal macros; separate policies for trusted libraries.</p>
+  <hr/>
+</section>
+
+<section id="scenario-018" class="scenario fp">
+  <h2>Scenario 018 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Suspicious OAuth app consent <em>(Alert ID: MDCA-9317-018)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0081, User: user98@contoso.com, SrcIP: 20.4.3.80, Location: UK, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>App requested Files.Read scope only</li><li>Verified publisher; internal IT created app</li><li>Consent during change window</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where ActionType == "OAuth2PermissionGrantAdded"
+| project TimeGenerated, User, Application, Scopes</code></pre>
+  </details>
+  <p><strong>Context:</strong> Internal integration for SharePoint search pilot.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Expected behavior; pre-approved app.</p>
+  <p><strong>Remediation:</strong> None.</p>
+  <p><strong>Prevention:</strong> Tag internal apps; maintain app catalog.</p>
+  <hr/>
+</section>
+
+<section id="scenario-019" class="scenario fp">
+  <h2>Scenario 019 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> EDR detected Mimikatz string in memory <em>(Alert ID: MDE-6310-019)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0033, User: user20@contoso.com, SrcIP: 20.4.6.10, Location: Germany, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Memory scan flagged 'sekurlsa' string</li><li>Process was lsass dump attempt blocked</li><li>Event correlated with EDR test by red team</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceImageLoadEvents
+| where InitiatingProcessFileName has_any ("procdump.exe","rundll32.exe")
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> Scheduled red-team exercise performing detection validation.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Benign simulation; exercise ticket present.</p>
+  <p><strong>Remediation:</strong> Document test; retain telemetry for tuning validation.</p>
+  <p><strong>Prevention:</strong> Maintain red team IPs/tags; purple team cadence.</p>
+  <hr/>
+</section>
+
+<section id="scenario-020" class="scenario fp">
+  <h2>Scenario 020 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> Anomalous DNS tunneling volume <em>(Alert ID: Sentinel-2290-020)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-007E, User: user3@contoso.com, SrcIP: 20.4.2.100, Location: UAE, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>High TXT query rate</li><li>Domains match internal test lab</li><li>Origin from lab subnet</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DnsEvents
+| where QueryType == "TXT"
+| summarize count() by ClientIP, bin(TimeGenerated, 5m)</code></pre>
+  </details>
+  <p><strong>Context:</strong> Network team performing approved tunneling test in lab.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Authorized experiment; outside production network.</p>
+  <p><strong>Remediation:</strong> None.</p>
+  <p><strong>Prevention:</strong> Label lab ranges; exclude from production detections.</p>
+  <hr/>
+</section>
+
+<section id="scenario-021" class="scenario tp">
+  <h2>Scenario 021 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> Suspicious PowerShell command detected <em>(Alert ID: MDE-8787-021)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0016, User: user94@contoso.com, SrcIP: 20.4.7.110, Location: UK, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>PowerShell with obfuscation flags (-nop -w hidden -enc)</li><li>Network connection to known malicious IP</li><li>Child process: cmd.exe -> powershell.exe -> rundll32.exe</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceProcessEvents
+| where FileName =~ "powershell.exe" and ProcessCommandLine has_any ("-enc","-nop")
+| join kind=leftouter (DeviceNetworkEvents | where RemoteUrl has_any ("pastebin","bit.ly") or RemoteIP in ("185.199.110.153")) on DeviceId, InitiatingProcessId
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> User opened invoice.docm from external email; macro spawned obfuscated PowerShell that downloaded payload.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Matches known ransomware loader TTPs (T1059.001, T1105). Post-event beacons to C2 observed.</p>
+  <p><strong>Remediation:</strong> Isolated device via MDE, blocked indicators, initiated full AV scan, rotated credentials, and restored from backup.</p>
+  <p><strong>Prevention:</strong> Harden Office macro policies; enable ASR rules to block Office child processes; implement safe-links.</p>
+  <hr/>
+</section>
+
+<section id="scenario-022" class="scenario tp">
+  <h2>Scenario 022 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> Multiple failed MFA prompts followed by successful sign-in <em>(Alert ID: Sentinel-4295-022)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-008D, User: user22@contoso.com, SrcIP: 20.4.4.110, Location: Australia, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Unusual MFA push frequency (over 20 in 10 minutes)</li><li>Successful sign-in from previously unseen IP/asn</li><li>Risky sign-in flagged by Entra ID Protection</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>SigninLogs
+| where ResultType == "0" or ResultType == 0
+| extend IsNewIP = iff(ClientIP notin (todynamic(PreviousIPs)), true, false)
+| where IsNewIP and AuthenticationRequirement =~ "multiFactorAuthentication"
+| summarize count() by UserPrincipalName, bin(TimeGenerated, 5m)</code></pre>
+  </details>
+  <p><strong>Context:</strong> User reported MFA fatigue; attacker obtained password via phishing and spammed MFA until user approved.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Chain of events and telemetry indicate account takeover via MFA fatigue attack.</p>
+  <p><strong>Remediation:</strong> Reset password, revoke refresh tokens, force sign-out, register phishing-resistant MFA, review mailbox rules.</p>
+  <p><strong>Prevention:</strong> Enable number matching; conditional access with sign-in risk; implement phishing-resistant methods (FIDO2).</p>
+  <hr/>
+</section>
+
+<section id="scenario-023" class="scenario tp">
+  <h2>Scenario 023 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Identity</p>
+  <p><strong>Alert:</strong> Pass-the-Hash attack detected <em>(Alert ID: MDI-5061-023)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0050, User: user52@contoso.com, SrcIP: 20.4.9.150, Location: UAE, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Abnormal NTLM authentication patterns</li><li>Lateral movement to multiple servers within minutes</li><li>Mismatch between device used and typical user workstation</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>// Investigate suspicious NTLM authentications via Sentinel
+SecurityAlert
+| where ProductName == "Azure Advanced Threat Protection"
+| where Title has "Pass-the-Hash"
+| project TimeGenerated, Entities</code></pre>
+  </details>
+  <p><strong>Context:</strong> Service account hash reused from compromised endpoint; rapid admin share access attempts observed.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Classic PtH behavior with credential reuse, anomalous device, and lateral movement sequence (T1550.002).</p>
+  <p><strong>Remediation:</strong> Invalidate Kerberos tickets, rotate service account credentials, isolate compromised host, enable SMB signing.</p>
+  <p><strong>Prevention:</strong> Enforce tiered admin model; restrict lateral movement; deploy LAPS/Privileged Access Workstations.</p>
+  <hr/>
+</section>
+
+<section id="scenario-024" class="scenario tp">
+  <h2>Scenario 024 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Malicious OAuth app consented by user <em>(Alert ID: MDCA-4608-024)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-003A, User: user9@contoso.com, SrcIP: 20.4.5.110, Location: India, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>New OAuth app with high-permission scopes (Mail.ReadWrite, Files.ReadWrite.All)</li><li>Consent granted outside business hours</li><li>Suspicious publisher with no verified publisher status</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where ActionType == "OAuth2PermissionGrantAdded"
+| extend Scopes = tostring(parse_json(RawEventData).Scopes)
+| where Scopes has_any ("Mail.ReadWrite","Files.ReadWrite.All")</code></pre>
+  </details>
+  <p><strong>Context:</strong> User fell for consent phishing page that requested excessive Graph API permissions.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Token-based persistence observed; exfil via Graph API after consent.</p>
+  <p><strong>Remediation:</strong> Revoke app consent, audit auditLogs/directoryAudits, rotate OAuth secrets, investigate mailbox/OneDrive access.</p>
+  <p><strong>Prevention:</strong> Enforce publisher verification; consent policies; educate users on OAuth consent prompts.</p>
+  <hr/>
+</section>
+
+<section id="scenario-025" class="scenario tp">
+  <h2>Scenario 025 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> RDP from TOR exit node followed by suspicious process execution <em>(Alert ID: Sentinel-6413-025)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0002, User: user10@contoso.com, SrcIP: 20.4.9.100, Location: India, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>RDP login from IP in TOR exit node list</li><li>Immediate execution of adfind.exe and net.exe enumeration</li><li>Creation of new local admin user</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>Heartbeat
+| join kind=inner (SigninLogs | where AppDisplayName =~ "Azure Windows Sign-In") on Computer
+| join kind=inner (ThreatIntelligenceIndicator | where Description has "TOR") on $left.ClientIP == $right.NetworkIP
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> Exposed RDP service allowed inbound connections; attacker began recon immediately post-login.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Sequence of TOR sign-in + recon tooling is indicative of intrusion, not admin activity.</p>
+  <p><strong>Remediation:</strong> Disable external RDP, enforce VPN, remove rogue admin, hunt for persistence, rotate creds.</p>
+  <p><strong>Prevention:</strong> Just-in-time access; network layer filtering; restrict RDP via conditional access and Azure Bastion.</p>
+  <hr/>
+</section>
+
+<section id="scenario-026" class="scenario tp">
+  <h2>Scenario 026 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Office 365</p>
+  <p><strong>Alert:</strong> Malware delivered via Teams message link <em>(Alert ID: MDO-3167-026)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0013, User: user66@contoso.com, SrcIP: 20.4.4.40, Location: Singapore, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Safe Links rewrote URL; post-click sandbox detonated file with high confidence malware verdict</li><li>Attachment hash matched known campaign</li><li>Secondary callback to known C2 domain</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>EmailUrlInfo
+| where UrlDomain has "sharepoint" or UrlDomain has "onedrive"
+| join kind=leftouter (ThreatIntelligenceIndicator) on $left.Url == $right.NetworkDestinationUrl</code></pre>
+  </details>
+  <p><strong>Context:</strong> User clicked Teams message, downloaded ISO containing LNK leading to DLL sideloading.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Detonation + callback + sideload chain confirms malicious payload delivery.</p>
+  <p><strong>Remediation:</strong> Quarantine artifacts, block indicators, reimage endpoint, user coaching.</p>
+  <p><strong>Prevention:</strong> Restrict ISO/LNK downloads; Teams Safe Links; application control (WDAC).</p>
+  <hr/>
+</section>
+
+<section id="scenario-027" class="scenario tp">
+  <h2>Scenario 027 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> Suspicious service installed for persistence <em>(Alert ID: MDE-2588-027)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0093, User: user74@contoso.com, SrcIP: 20.4.7.80, Location: USA, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>sc.exe create executed by non-admin user via UAC bypass</li><li>Service binary unsigned and living in user profile path</li><li>Service configured with restart-on-failure</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceProcessEvents
+| where FileName in ("sc.exe","services.exe")
+| where ProcessCommandLine has "create" and InitiatingProcessFileName != "services.exe"
+| project Timestamp, DeviceName, InitiatingProcessAccountName, ProcessCommandLine</code></pre>
+  </details>
+  <p><strong>Context:</strong> Post-exploitation persistence after initial phishing compromise.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Unsigned binary + user context + UAC bypass aligns with persistence T1543.003.</p>
+  <p><strong>Remediation:</strong> Remove service, delete binary, review autoruns, block hash, monitor re-creation.</p>
+  <p><strong>Prevention:</strong> Harden UAC; restrict service creation; enable ASR rules.</p>
+  <hr/>
+</section>
+
+<section id="scenario-028" class="scenario tp">
+  <h2>Scenario 028 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Office 365</p>
+  <p><strong>Alert:</strong> Mailbox forwarding rule to external domain <em>(Alert ID: MDO-2612-028)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-006F, User: user46@contoso.com, SrcIP: 20.4.6.140, Location: Australia, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>New-InboxRule forwarding to external gmail domain</li><li>Rule name matches common attacker pattern ('.' or 'Invoice')</li><li>User reported missing emails</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>OfficeActivity
+| where Operation == "New-InboxRule"
+| extend ForwardTo = tostring(Parameters[0].Value)
+| where ForwardTo contains "@gmail.com" or ForwardTo contains "@outlook.com" </code></pre>
+  </details>
+  <p><strong>Context:</strong> Account takeover used mailbox rules to exfiltrate and hide inbound security emails.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> External auto-forwarding with concealment; classic BEC TTP.</p>
+  <p><strong>Remediation:</strong> Remove rules, reset password, revoke tokens, notify partners, enable external forwarding block.</p>
+  <p><strong>Prevention:</strong> Conditional access, impossible travel detection, alert on new rules.</p>
+  <hr/>
+</section>
+
+<section id="scenario-029" class="scenario tp">
+  <h2>Scenario 029 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Identity</p>
+  <p><strong>Alert:</strong> Kerberoasting attempt detected <em>(Alert ID: MDI-8350-029)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0010, User: user52@contoso.com, SrcIP: 20.4.5.110, Location: UK, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Abnormal spike in Kerberos service ticket requests (TGS)</li><li>Requests target SPNs with weak encryption types</li><li>Hashcat-style requests observed</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>SecurityAlert
+| where ProductName has "Defender for Identity" and Title has "Kerberoasting"
+| project TimeGenerated, Title, Description, Entities</code></pre>
+  </details>
+  <p><strong>Context:</strong> Attacker enumerating SPNs to crack service account hashes offline.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Clear TGS spam and weak cipher targeting.</p>
+  <p><strong>Remediation:</strong> Rotate service account passwords to 25+ chars, RC4 disabled, monitor DCs.</p>
+  <p><strong>Prevention:</strong> Managed service accounts; disable unconstrained delegation; enforce AES-only.</p>
+  <hr/>
+</section>
+
+<section id="scenario-030" class="scenario tp">
+  <h2>Scenario 030 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> Suspicious Azure automation account runbook modification <em>(Alert ID: Sentinel-8260-030)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0024, User: user55@contoso.com, SrcIP: 20.4.3.90, Location: Singapore, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Runbook updated outside maintenance window</li><li>Webhook created to external endpoint</li><li>Execution frequency increased abruptly</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>AzureActivity
+| where OperationNameValue has "MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/RUNBOOKS/WRITE"
+| project TimeGenerated, Caller, ResourceGroup, Resource, ActivityStatusValue</code></pre>
+  </details>
+  <p><strong>Context:</strong> Cloud persistence via modified runbook to exfiltration endpoint.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Abuse of automation accounts for data exfil and scheduled tasks.</p>
+  <p><strong>Remediation:</strong> Revert runbook, rotate keys, remove webhooks, review RBAC, audit activity.</p>
+  <p><strong>Prevention:</strong> Privileged access policies; alert on webhook creation; change management.</p>
+  <hr/>
+</section>
+
+<section id="scenario-031" class="scenario fp">
+  <h2>Scenario 031 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Office 365</p>
+  <p><strong>Alert:</strong> Phishing email detected (lookalike domain) <em>(Alert ID: MDO-8956-031)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-008D, User: user13@contoso.com, SrcIP: 20.4.1.130, Location: India, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Domain similarity score high</li><li>New sender domain observed</li><li>URL rewrites by Safe Links</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>EmailEvents
+| where SenderFromDomain endswith "partner-newdomain.com"
+| summarize by SenderFromAddress</code></pre>
+  </details>
+  <p><strong>Context:</strong> Partner launched rebranded domain; SPF/DKIM/DMARC valid; no malware detected in detonation.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Legitimate sender with new domain; security controls triggered heuristics.</p>
+  <p><strong>Remediation:</strong> Allow-list domain via policy after verification; monitor briefly.</p>
+  <p><strong>Prevention:</strong> Maintain approved sender registry; communicate partner domain changes.</p>
+  <hr/>
+</section>
+
+<section id="scenario-032" class="scenario fp">
+  <h2>Scenario 032 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> Suspected port scan from vulnerability scanner <em>(Alert ID: MDE-5345-032)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-007C, User: user28@contoso.com, SrcIP: 20.4.6.80, Location: India, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>High-rate TCP SYNs across multiple hosts</li><li>Nmap-like fingerprints in User-Agent</li><li>Activity within maintenance window</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceNetworkEvents
+| where InitiatingProcessFileName =~ "nmap.exe" or RemotePort in (22,3389,445,80,443)
+| summarize count() by DeviceName, InitiatingProcessAccountName</code></pre>
+  </details>
+  <p><strong>Context:</strong> Internal Qualys/Nessus scan during scheduled weekly assessment.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Authorized scanner IP and schedule; expected behavior.</p>
+  <p><strong>Remediation:</strong> None; document scanner exceptions in alert tuning.</p>
+  <p><strong>Prevention:</strong> Tune analytics to exclude scanner IP ranges.</p>
+  <hr/>
+</section>
+
+<section id="scenario-033" class="scenario fp">
+  <h2>Scenario 033 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> Impossible travel sign-in <em>(Alert ID: Sentinel-1958-033)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0075, User: user37@contoso.com, SrcIP: 20.4.6.140, Location: Canada, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Sign-ins from India then UK within 10 minutes</li><li>GeoIP database drift noted</li><li>Both sessions via corporate VPN POPs</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>SigninLogs
+| extend Country = tostring(LocationDetails.countryOrRegion)
+| summarize makeset(Country) by UserPrincipalName, bin(TimeGenerated, 10m)</code></pre>
+  </details>
+  <p><strong>Context:</strong> User connected via split-tunnel VPN; geo appears different due to egress POPs.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Benign VPN artifact; device compliance and MFA healthy.</p>
+  <p><strong>Remediation:</strong> None; mark as FP; update detection to account for VPN ranges.</p>
+  <p><strong>Prevention:</strong> Add VPN egress IPs to named locations in Conditional Access.</p>
+  <hr/>
+</section>
+
+<section id="scenario-034" class="scenario fp">
+  <h2>Scenario 034 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> RDP brute force suspected on jump host <em>(Alert ID: MDE-8811-034)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0095, User: user95@contoso.com, SrcIP: 20.4.8.60, Location: India, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Multiple failed logons followed by success</li><li>Source IP from internal management subnet</li><li>Success via service account used by automation</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceLogonEvents
+| where ActionType in ("LogonFailed","LogonSuccess")
+| summarize Failed=countif(ActionType=="LogonFailed"), Success=countif(ActionType=="LogonSuccess") by DeviceName, AccountName, bin(Timestamp, 15m)</code></pre>
+  </details>
+  <p><strong>Context:</strong> Automated patching tool cycling credentials during rotation caused failures before success.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Planned maintenance activity; not malicious.</p>
+  <p><strong>Remediation:</strong> Tune to ignore service account auth storms during maintenance window.</p>
+  <p><strong>Prevention:</strong> Stagger rotations; improve tooling to reduce failures.</p>
+  <hr/>
+</section>
+
+<section id="scenario-035" class="scenario fp">
+  <h2>Scenario 035 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Suspicious OneDrive mass download <em>(Alert ID: MDCA-2122-035)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0081, User: user118@contoso.com, SrcIP: 20.4.8.30, Location: Germany, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>High-volume downloads from single user</li><li>Accessing many SharePoint sites</li><li>Downloads during normal hours</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where Application == "OneDrive"
+| summarize Downloads=count() by User, bin(TimeGenerated, 1h)</code></pre>
+  </details>
+  <p><strong>Context:</strong> New project migration; user was bulk-downloading approved data to work laptop.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Business-justified activity with ticket and manager approval.</p>
+  <p><strong>Remediation:</strong> None; document exception.</p>
+  <p><strong>Prevention:</strong> Temporary policy relaxation with DLP monitoring.</p>
+  <hr/>
+</section>
+
+<section id="scenario-036" class="scenario fp">
+  <h2>Scenario 036 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> Suspicious service creation <em>(Alert ID: MDE-1651-036)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0012, User: user87@contoso.com, SrcIP: 20.4.4.40, Location: Australia, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>sc.exe create observed</li><li>Binary unsigned in temp path</li><li>Executed by IT engineer during troubleshooting</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceProcessEvents
+| where FileName =~ "sc.exe" and ProcessCommandLine has "create"
+| project Timestamp, DeviceName, InitiatingProcessAccountName, ProcessCommandLine</code></pre>
+  </details>
+  <p><strong>Context:</strong> IT created a temporary diagnostic service to capture logs.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Legitimate admin action; change ticket found.</p>
+  <p><strong>Remediation:</strong> Close as FP; add admin tool path to allow list.</p>
+  <p><strong>Prevention:</strong> Admin activity tagging through PAW and change control.</p>
+  <hr/>
+</section>
+
+<section id="scenario-037" class="scenario fp">
+  <h2>Scenario 037 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Office 365</p>
+  <p><strong>Alert:</strong> Suspicious macro execution <em>(Alert ID: MDO-6147-037)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0015, User: user54@contoso.com, SrcIP: 20.4.9.170, Location: UAE, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Macro-enabled document opened</li><li>Child process spawn blocked by ASR</li><li>File came from internal SharePoint library</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>EmailAttachmentInfo
+| where FileType == "docm" or FileType == "xlsm"
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> Finance macro workbook with legitimate automation; ASR blocked but no malicious indicators.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Business macro; benign despite ASR trigger.</p>
+  <p><strong>Remediation:</strong> Create signed macro policy for finance templates.</p>
+  <p><strong>Prevention:</strong> Code-sign internal macros; separate policies for trusted libraries.</p>
+  <hr/>
+</section>
+
+<section id="scenario-038" class="scenario fp">
+  <h2>Scenario 038 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Suspicious OAuth app consent <em>(Alert ID: MDCA-2188-038)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-003E, User: user34@contoso.com, SrcIP: 20.4.6.70, Location: Germany, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>App requested Files.Read scope only</li><li>Verified publisher; internal IT created app</li><li>Consent during change window</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where ActionType == "OAuth2PermissionGrantAdded"
+| project TimeGenerated, User, Application, Scopes</code></pre>
+  </details>
+  <p><strong>Context:</strong> Internal integration for SharePoint search pilot.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Expected behavior; pre-approved app.</p>
+  <p><strong>Remediation:</strong> None.</p>
+  <p><strong>Prevention:</strong> Tag internal apps; maintain app catalog.</p>
+  <hr/>
+</section>
+
+<section id="scenario-039" class="scenario fp">
+  <h2>Scenario 039 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> EDR detected Mimikatz string in memory <em>(Alert ID: MDE-5345-039)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0003, User: user59@contoso.com, SrcIP: 20.4.9.80, Location: UK, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Memory scan flagged 'sekurlsa' string</li><li>Process was lsass dump attempt blocked</li><li>Event correlated with EDR test by red team</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceImageLoadEvents
+| where InitiatingProcessFileName has_any ("procdump.exe","rundll32.exe")
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> Scheduled red-team exercise performing detection validation.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Benign simulation; exercise ticket present.</p>
+  <p><strong>Remediation:</strong> Document test; retain telemetry for tuning validation.</p>
+  <p><strong>Prevention:</strong> Maintain red team IPs/tags; purple team cadence.</p>
+  <hr/>
+</section>
+
+<section id="scenario-040" class="scenario fp">
+  <h2>Scenario 040 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> Anomalous DNS tunneling volume <em>(Alert ID: Sentinel-9900-040)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0022, User: user45@contoso.com, SrcIP: 20.4.1.180, Location: USA, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>High TXT query rate</li><li>Domains match internal test lab</li><li>Origin from lab subnet</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DnsEvents
+| where QueryType == "TXT"
+| summarize count() by ClientIP, bin(TimeGenerated, 5m)</code></pre>
+  </details>
+  <p><strong>Context:</strong> Network team performing approved tunneling test in lab.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Authorized experiment; outside production network.</p>
+  <p><strong>Remediation:</strong> None.</p>
+  <p><strong>Prevention:</strong> Label lab ranges; exclude from production detections.</p>
+  <hr/>
+</section>
+
+<section id="scenario-041" class="scenario tp">
+  <h2>Scenario 041 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> Suspicious Azure automation account runbook modification <em>(Alert ID: Sentinel-5333-041)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0088, User: user2@contoso.com, SrcIP: 20.4.9.190, Location: Singapore, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Runbook updated outside maintenance window</li><li>Webhook created to external endpoint</li><li>Execution frequency increased abruptly</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>AzureActivity
+| where OperationNameValue has "MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/RUNBOOKS/WRITE"
+| project TimeGenerated, Caller, ResourceGroup, Resource, ActivityStatusValue</code></pre>
+  </details>
+  <p><strong>Context:</strong> Cloud persistence via modified runbook to exfiltration endpoint.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Abuse of automation accounts for data exfil and scheduled tasks.</p>
+  <p><strong>Remediation:</strong> Revert runbook, rotate keys, remove webhooks, review RBAC, audit activity.</p>
+  <p><strong>Prevention:</strong> Privileged access policies; alert on webhook creation; change management.</p>
+  <hr/>
+</section>
+
+<section id="scenario-042" class="scenario tp">
+  <h2>Scenario 042 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Malicious OAuth app consented by user <em>(Alert ID: MDCA-6617-042)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-001C, User: user96@contoso.com, SrcIP: 20.4.8.90, Location: Germany, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>New OAuth app with high-permission scopes (Mail.ReadWrite, Files.ReadWrite.All)</li><li>Consent granted outside business hours</li><li>Suspicious publisher with no verified publisher status</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where ActionType == "OAuth2PermissionGrantAdded"
+| extend Scopes = tostring(parse_json(RawEventData).Scopes)
+| where Scopes has_any ("Mail.ReadWrite","Files.ReadWrite.All")</code></pre>
+  </details>
+  <p><strong>Context:</strong> User fell for consent phishing page that requested excessive Graph API permissions.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Token-based persistence observed; exfil via Graph API after consent.</p>
+  <p><strong>Remediation:</strong> Revoke app consent, audit auditLogs/directoryAudits, rotate OAuth secrets, investigate mailbox/OneDrive access.</p>
+  <p><strong>Prevention:</strong> Enforce publisher verification; consent policies; educate users on OAuth consent prompts.</p>
+  <hr/>
+</section>
+
+<section id="scenario-043" class="scenario tp">
+  <h2>Scenario 043 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> Suspicious service installed for persistence <em>(Alert ID: MDE-5533-043)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0044, User: user65@contoso.com, SrcIP: 20.4.7.120, Location: Singapore, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>sc.exe create executed by non-admin user via UAC bypass</li><li>Service binary unsigned and living in user profile path</li><li>Service configured with restart-on-failure</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceProcessEvents
+| where FileName in ("sc.exe","services.exe")
+| where ProcessCommandLine has "create" and InitiatingProcessFileName != "services.exe"
+| project Timestamp, DeviceName, InitiatingProcessAccountName, ProcessCommandLine</code></pre>
+  </details>
+  <p><strong>Context:</strong> Post-exploitation persistence after initial phishing compromise.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Unsigned binary + user context + UAC bypass aligns with persistence T1543.003.</p>
+  <p><strong>Remediation:</strong> Remove service, delete binary, review autoruns, block hash, monitor re-creation.</p>
+  <p><strong>Prevention:</strong> Harden UAC; restrict service creation; enable ASR rules.</p>
+  <hr/>
+</section>
+
+<section id="scenario-044" class="scenario tp">
+  <h2>Scenario 044 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> Multiple failed MFA prompts followed by successful sign-in <em>(Alert ID: Sentinel-8007-044)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0001, User: user43@contoso.com, SrcIP: 20.4.2.150, Location: Singapore, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Unusual MFA push frequency (over 20 in 10 minutes)</li><li>Successful sign-in from previously unseen IP/asn</li><li>Risky sign-in flagged by Entra ID Protection</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>SigninLogs
+| where ResultType == "0" or ResultType == 0
+| extend IsNewIP = iff(ClientIP notin (todynamic(PreviousIPs)), true, false)
+| where IsNewIP and AuthenticationRequirement =~ "multiFactorAuthentication"
+| summarize count() by UserPrincipalName, bin(TimeGenerated, 5m)</code></pre>
+  </details>
+  <p><strong>Context:</strong> User reported MFA fatigue; attacker obtained password via phishing and spammed MFA until user approved.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Chain of events and telemetry indicate account takeover via MFA fatigue attack.</p>
+  <p><strong>Remediation:</strong> Reset password, revoke refresh tokens, force sign-out, register phishing-resistant MFA, review mailbox rules.</p>
+  <p><strong>Prevention:</strong> Enable number matching; conditional access with sign-in risk; implement phishing-resistant methods (FIDO2).</p>
+  <hr/>
+</section>
+
+<section id="scenario-045" class="scenario fp">
+  <h2>Scenario 045 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Suspicious OAuth app consent <em>(Alert ID: MDCA-3426-045)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0003, User: user15@contoso.com, SrcIP: 20.4.2.10, Location: Germany, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>App requested Files.Read scope only</li><li>Verified publisher; internal IT created app</li><li>Consent during change window</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where ActionType == "OAuth2PermissionGrantAdded"
+| project TimeGenerated, User, Application, Scopes</code></pre>
+  </details>
+  <p><strong>Context:</strong> Internal integration for SharePoint search pilot.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Expected behavior; pre-approved app.</p>
+  <p><strong>Remediation:</strong> None.</p>
+  <p><strong>Prevention:</strong> Tag internal apps; maintain app catalog.</p>
+  <hr/>
+</section>
+
+<section id="scenario-046" class="scenario fp">
+  <h2>Scenario 046 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> RDP brute force suspected on jump host <em>(Alert ID: MDE-5088-046)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0021, User: user6@contoso.com, SrcIP: 20.4.5.30, Location: UAE, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Multiple failed logons followed by success</li><li>Source IP from internal management subnet</li><li>Success via service account used by automation</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceLogonEvents
+| where ActionType in ("LogonFailed","LogonSuccess")
+| summarize Failed=countif(ActionType=="LogonFailed"), Success=countif(ActionType=="LogonSuccess") by DeviceName, AccountName, bin(Timestamp, 15m)</code></pre>
+  </details>
+  <p><strong>Context:</strong> Automated patching tool cycling credentials during rotation caused failures before success.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Planned maintenance activity; not malicious.</p>
+  <p><strong>Remediation:</strong> Tune to ignore service account auth storms during maintenance window.</p>
+  <p><strong>Prevention:</strong> Stagger rotations; improve tooling to reduce failures.</p>
+  <hr/>
+</section>
+
+<section id="scenario-047" class="scenario tp">
+  <h2>Scenario 047 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Malicious OAuth app consented by user <em>(Alert ID: MDCA-3662-047)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-005B, User: user100@contoso.com, SrcIP: 20.4.8.110, Location: Australia, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>New OAuth app with high-permission scopes (Mail.ReadWrite, Files.ReadWrite.All)</li><li>Consent granted outside business hours</li><li>Suspicious publisher with no verified publisher status</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where ActionType == "OAuth2PermissionGrantAdded"
+| extend Scopes = tostring(parse_json(RawEventData).Scopes)
+| where Scopes has_any ("Mail.ReadWrite","Files.ReadWrite.All")</code></pre>
+  </details>
+  <p><strong>Context:</strong> User fell for consent phishing page that requested excessive Graph API permissions.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Token-based persistence observed; exfil via Graph API after consent.</p>
+  <p><strong>Remediation:</strong> Revoke app consent, audit auditLogs/directoryAudits, rotate OAuth secrets, investigate mailbox/OneDrive access.</p>
+  <p><strong>Prevention:</strong> Enforce publisher verification; consent policies; educate users on OAuth consent prompts.</p>
+  <hr/>
+</section>
+
+<section id="scenario-048" class="scenario tp">
+  <h2>Scenario 048 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Office 365</p>
+  <p><strong>Alert:</strong> Malware delivered via Teams message link <em>(Alert ID: MDO-2771-048)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-006A, User: user4@contoso.com, SrcIP: 20.4.3.80, Location: UAE, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Safe Links rewrote URL; post-click sandbox detonated file with high confidence malware verdict</li><li>Attachment hash matched known campaign</li><li>Secondary callback to known C2 domain</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>EmailUrlInfo
+| where UrlDomain has "sharepoint" or UrlDomain has "onedrive"
+| join kind=leftouter (ThreatIntelligenceIndicator) on $left.Url == $right.NetworkDestinationUrl</code></pre>
+  </details>
+  <p><strong>Context:</strong> User clicked Teams message, downloaded ISO containing LNK leading to DLL sideloading.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Detonation + callback + sideload chain confirms malicious payload delivery.</p>
+  <p><strong>Remediation:</strong> Quarantine artifacts, block indicators, reimage endpoint, user coaching.</p>
+  <p><strong>Prevention:</strong> Restrict ISO/LNK downloads; Teams Safe Links; application control (WDAC).</p>
+  <hr/>
+</section>
+
+<section id="scenario-049" class="scenario fp">
+  <h2>Scenario 049 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> Impossible travel sign-in <em>(Alert ID: Sentinel-4728-049)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-000A, User: user110@contoso.com, SrcIP: 20.4.7.70, Location: USA, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Sign-ins from India then UK within 10 minutes</li><li>GeoIP database drift noted</li><li>Both sessions via corporate VPN POPs</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>SigninLogs
+| extend Country = tostring(LocationDetails.countryOrRegion)
+| summarize makeset(Country) by UserPrincipalName, bin(TimeGenerated, 10m)</code></pre>
+  </details>
+  <p><strong>Context:</strong> User connected via split-tunnel VPN; geo appears different due to egress POPs.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Benign VPN artifact; device compliance and MFA healthy.</p>
+  <p><strong>Remediation:</strong> None; mark as FP; update detection to account for VPN ranges.</p>
+  <p><strong>Prevention:</strong> Add VPN egress IPs to named locations in Conditional Access.</p>
+  <hr/>
+</section>
+
+<section id="scenario-050" class="scenario tp">
+  <h2>Scenario 050 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Office 365</p>
+  <p><strong>Alert:</strong> Mailbox forwarding rule to external domain <em>(Alert ID: MDO-5573-050)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0007, User: user85@contoso.com, SrcIP: 20.4.3.120, Location: Australia, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>New-InboxRule forwarding to external gmail domain</li><li>Rule name matches common attacker pattern ('.' or 'Invoice')</li><li>User reported missing emails</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>OfficeActivity
+| where Operation == "New-InboxRule"
+| extend ForwardTo = tostring(Parameters[0].Value)
+| where ForwardTo contains "@gmail.com" or ForwardTo contains "@outlook.com" </code></pre>
+  </details>
+  <p><strong>Context:</strong> Account takeover used mailbox rules to exfiltrate and hide inbound security emails.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> External auto-forwarding with concealment; classic BEC TTP.</p>
+  <p><strong>Remediation:</strong> Remove rules, reset password, revoke tokens, notify partners, enable external forwarding block.</p>
+  <p><strong>Prevention:</strong> Conditional access, impossible travel detection, alert on new rules.</p>
+  <hr/>
+</section>
+
+<section id="scenario-051" class="scenario fp">
+  <h2>Scenario 051 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> Suspected port scan from vulnerability scanner <em>(Alert ID: MDE-3925-051)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0083, User: user52@contoso.com, SrcIP: 20.4.8.50, Location: UAE, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>High-rate TCP SYNs across multiple hosts</li><li>Nmap-like fingerprints in User-Agent</li><li>Activity within maintenance window</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceNetworkEvents
+| where InitiatingProcessFileName =~ "nmap.exe" or RemotePort in (22,3389,445,80,443)
+| summarize count() by DeviceName, InitiatingProcessAccountName</code></pre>
+  </details>
+  <p><strong>Context:</strong> Internal Qualys/Nessus scan during scheduled weekly assessment.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Authorized scanner IP and schedule; expected behavior.</p>
+  <p><strong>Remediation:</strong> None; document scanner exceptions in alert tuning.</p>
+  <p><strong>Prevention:</strong> Tune analytics to exclude scanner IP ranges.</p>
+  <hr/>
+</section>
+
+<section id="scenario-052" class="scenario fp">
+  <h2>Scenario 052 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> EDR detected Mimikatz string in memory <em>(Alert ID: MDE-9379-052)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0044, User: user5@contoso.com, SrcIP: 20.4.2.90, Location: Australia, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Memory scan flagged 'sekurlsa' string</li><li>Process was lsass dump attempt blocked</li><li>Event correlated with EDR test by red team</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceImageLoadEvents
+| where InitiatingProcessFileName has_any ("procdump.exe","rundll32.exe")
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> Scheduled red-team exercise performing detection validation.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Benign simulation; exercise ticket present.</p>
+  <p><strong>Remediation:</strong> Document test; retain telemetry for tuning validation.</p>
+  <p><strong>Prevention:</strong> Maintain red team IPs/tags; purple team cadence.</p>
+  <hr/>
+</section>
+
+<section id="scenario-053" class="scenario tp">
+  <h2>Scenario 053 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Malicious OAuth app consented by user <em>(Alert ID: MDCA-1027-053)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0063, User: user116@contoso.com, SrcIP: 20.4.8.150, Location: USA, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>New OAuth app with high-permission scopes (Mail.ReadWrite, Files.ReadWrite.All)</li><li>Consent granted outside business hours</li><li>Suspicious publisher with no verified publisher status</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where ActionType == "OAuth2PermissionGrantAdded"
+| extend Scopes = tostring(parse_json(RawEventData).Scopes)
+| where Scopes has_any ("Mail.ReadWrite","Files.ReadWrite.All")</code></pre>
+  </details>
+  <p><strong>Context:</strong> User fell for consent phishing page that requested excessive Graph API permissions.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Token-based persistence observed; exfil via Graph API after consent.</p>
+  <p><strong>Remediation:</strong> Revoke app consent, audit auditLogs/directoryAudits, rotate OAuth secrets, investigate mailbox/OneDrive access.</p>
+  <p><strong>Prevention:</strong> Enforce publisher verification; consent policies; educate users on OAuth consent prompts.</p>
+  <hr/>
+</section>
+
+<section id="scenario-054" class="scenario fp">
+  <h2>Scenario 054 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Office 365</p>
+  <p><strong>Alert:</strong> Suspicious macro execution <em>(Alert ID: MDO-6143-054)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-008A, User: user88@contoso.com, SrcIP: 20.4.3.130, Location: UAE, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Macro-enabled document opened</li><li>Child process spawn blocked by ASR</li><li>File came from internal SharePoint library</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>EmailAttachmentInfo
+| where FileType == "docm" or FileType == "xlsm"
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> Finance macro workbook with legitimate automation; ASR blocked but no malicious indicators.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Business macro; benign despite ASR trigger.</p>
+  <p><strong>Remediation:</strong> Create signed macro policy for finance templates.</p>
+  <p><strong>Prevention:</strong> Code-sign internal macros; separate policies for trusted libraries.</p>
+  <hr/>
+</section>
+
+<section id="scenario-055" class="scenario tp">
+  <h2>Scenario 055 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Malicious OAuth app consented by user <em>(Alert ID: MDCA-3085-055)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-004D, User: user65@contoso.com, SrcIP: 20.4.5.40, Location: Australia, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>New OAuth app with high-permission scopes (Mail.ReadWrite, Files.ReadWrite.All)</li><li>Consent granted outside business hours</li><li>Suspicious publisher with no verified publisher status</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where ActionType == "OAuth2PermissionGrantAdded"
+| extend Scopes = tostring(parse_json(RawEventData).Scopes)
+| where Scopes has_any ("Mail.ReadWrite","Files.ReadWrite.All")</code></pre>
+  </details>
+  <p><strong>Context:</strong> User fell for consent phishing page that requested excessive Graph API permissions.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Token-based persistence observed; exfil via Graph API after consent.</p>
+  <p><strong>Remediation:</strong> Revoke app consent, audit auditLogs/directoryAudits, rotate OAuth secrets, investigate mailbox/OneDrive access.</p>
+  <p><strong>Prevention:</strong> Enforce publisher verification; consent policies; educate users on OAuth consent prompts.</p>
+  <hr/>
+</section>
+
+<section id="scenario-056" class="scenario tp">
+  <h2>Scenario 056 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> Suspicious service installed for persistence <em>(Alert ID: MDE-9977-056)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-006C, User: user86@contoso.com, SrcIP: 20.4.6.30, Location: Germany, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>sc.exe create executed by non-admin user via UAC bypass</li><li>Service binary unsigned and living in user profile path</li><li>Service configured with restart-on-failure</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceProcessEvents
+| where FileName in ("sc.exe","services.exe")
+| where ProcessCommandLine has "create" and InitiatingProcessFileName != "services.exe"
+| project Timestamp, DeviceName, InitiatingProcessAccountName, ProcessCommandLine</code></pre>
+  </details>
+  <p><strong>Context:</strong> Post-exploitation persistence after initial phishing compromise.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Unsigned binary + user context + UAC bypass aligns with persistence T1543.003.</p>
+  <p><strong>Remediation:</strong> Remove service, delete binary, review autoruns, block hash, monitor re-creation.</p>
+  <p><strong>Prevention:</strong> Harden UAC; restrict service creation; enable ASR rules.</p>
+  <hr/>
+</section>
+
+<section id="scenario-057" class="scenario tp">
+  <h2>Scenario 057 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> Suspicious PowerShell command detected <em>(Alert ID: MDE-8618-057)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-004E, User: user37@contoso.com, SrcIP: 20.4.3.160, Location: Australia, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>PowerShell with obfuscation flags (-nop -w hidden -enc)</li><li>Network connection to known malicious IP</li><li>Child process: cmd.exe -> powershell.exe -> rundll32.exe</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceProcessEvents
+| where FileName =~ "powershell.exe" and ProcessCommandLine has_any ("-enc","-nop")
+| join kind=leftouter (DeviceNetworkEvents | where RemoteUrl has_any ("pastebin","bit.ly") or RemoteIP in ("185.199.110.153")) on DeviceId, InitiatingProcessId
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> User opened invoice.docm from external email; macro spawned obfuscated PowerShell that downloaded payload.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Matches known ransomware loader TTPs (T1059.001, T1105). Post-event beacons to C2 observed.</p>
+  <p><strong>Remediation:</strong> Isolated device via MDE, blocked indicators, initiated full AV scan, rotated credentials, and restored from backup.</p>
+  <p><strong>Prevention:</strong> Harden Office macro policies; enable ASR rules to block Office child processes; implement safe-links.</p>
+  <hr/>
+</section>
+
+<section id="scenario-058" class="scenario fp">
+  <h2>Scenario 058 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Suspicious OneDrive mass download <em>(Alert ID: MDCA-5649-058)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0072, User: user87@contoso.com, SrcIP: 20.4.3.170, Location: Canada, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>High-volume downloads from single user</li><li>Accessing many SharePoint sites</li><li>Downloads during normal hours</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where Application == "OneDrive"
+| summarize Downloads=count() by User, bin(TimeGenerated, 1h)</code></pre>
+  </details>
+  <p><strong>Context:</strong> New project migration; user was bulk-downloading approved data to work laptop.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Business-justified activity with ticket and manager approval.</p>
+  <p><strong>Remediation:</strong> None; document exception.</p>
+  <p><strong>Prevention:</strong> Temporary policy relaxation with DLP monitoring.</p>
+  <hr/>
+</section>
+
+<section id="scenario-059" class="scenario fp">
+  <h2>Scenario 059 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Office 365</p>
+  <p><strong>Alert:</strong> Suspicious macro execution <em>(Alert ID: MDO-1757-059)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0056, User: user12@contoso.com, SrcIP: 20.4.4.40, Location: Singapore, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Macro-enabled document opened</li><li>Child process spawn blocked by ASR</li><li>File came from internal SharePoint library</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>EmailAttachmentInfo
+| where FileType == "docm" or FileType == "xlsm"
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> Finance macro workbook with legitimate automation; ASR blocked but no malicious indicators.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Business macro; benign despite ASR trigger.</p>
+  <p><strong>Remediation:</strong> Create signed macro policy for finance templates.</p>
+  <p><strong>Prevention:</strong> Code-sign internal macros; separate policies for trusted libraries.</p>
+  <hr/>
+</section>
+
+<section id="scenario-060" class="scenario tp">
+  <h2>Scenario 060 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Office 365</p>
+  <p><strong>Alert:</strong> Mailbox forwarding rule to external domain <em>(Alert ID: MDO-7291-060)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-007A, User: user79@contoso.com, SrcIP: 20.4.1.190, Location: Canada, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>New-InboxRule forwarding to external gmail domain</li><li>Rule name matches common attacker pattern ('.' or 'Invoice')</li><li>User reported missing emails</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>OfficeActivity
+| where Operation == "New-InboxRule"
+| extend ForwardTo = tostring(Parameters[0].Value)
+| where ForwardTo contains "@gmail.com" or ForwardTo contains "@outlook.com" </code></pre>
+  </details>
+  <p><strong>Context:</strong> Account takeover used mailbox rules to exfiltrate and hide inbound security emails.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> External auto-forwarding with concealment; classic BEC TTP.</p>
+  <p><strong>Remediation:</strong> Remove rules, reset password, revoke tokens, notify partners, enable external forwarding block.</p>
+  <p><strong>Prevention:</strong> Conditional access, impossible travel detection, alert on new rules.</p>
+  <hr/>
+</section>
+
+<section id="scenario-061" class="scenario fp">
+  <h2>Scenario 061 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> Suspicious service creation <em>(Alert ID: MDE-9486-061)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0067, User: user32@contoso.com, SrcIP: 20.4.2.190, Location: India, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>sc.exe create observed</li><li>Binary unsigned in temp path</li><li>Executed by IT engineer during troubleshooting</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceProcessEvents
+| where FileName =~ "sc.exe" and ProcessCommandLine has "create"
+| project Timestamp, DeviceName, InitiatingProcessAccountName, ProcessCommandLine</code></pre>
+  </details>
+  <p><strong>Context:</strong> IT created a temporary diagnostic service to capture logs.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Legitimate admin action; change ticket found.</p>
+  <p><strong>Remediation:</strong> Close as FP; add admin tool path to allow list.</p>
+  <p><strong>Prevention:</strong> Admin activity tagging through PAW and change control.</p>
+  <hr/>
+</section>
+
+<section id="scenario-062" class="scenario fp">
+  <h2>Scenario 062 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Suspicious OneDrive mass download <em>(Alert ID: MDCA-9702-062)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-000D, User: user72@contoso.com, SrcIP: 20.4.4.70, Location: UK, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>High-volume downloads from single user</li><li>Accessing many SharePoint sites</li><li>Downloads during normal hours</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where Application == "OneDrive"
+| summarize Downloads=count() by User, bin(TimeGenerated, 1h)</code></pre>
+  </details>
+  <p><strong>Context:</strong> New project migration; user was bulk-downloading approved data to work laptop.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Business-justified activity with ticket and manager approval.</p>
+  <p><strong>Remediation:</strong> None; document exception.</p>
+  <p><strong>Prevention:</strong> Temporary policy relaxation with DLP monitoring.</p>
+  <hr/>
+</section>
+
+<section id="scenario-063" class="scenario fp">
+  <h2>Scenario 063 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Suspicious OAuth app consent <em>(Alert ID: MDCA-8777-063)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0052, User: user97@contoso.com, SrcIP: 20.4.6.190, Location: Australia, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>App requested Files.Read scope only</li><li>Verified publisher; internal IT created app</li><li>Consent during change window</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where ActionType == "OAuth2PermissionGrantAdded"
+| project TimeGenerated, User, Application, Scopes</code></pre>
+  </details>
+  <p><strong>Context:</strong> Internal integration for SharePoint search pilot.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Expected behavior; pre-approved app.</p>
+  <p><strong>Remediation:</strong> None.</p>
+  <p><strong>Prevention:</strong> Tag internal apps; maintain app catalog.</p>
+  <hr/>
+</section>
+
+<section id="scenario-064" class="scenario fp">
+  <h2>Scenario 064 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Suspicious OneDrive mass download <em>(Alert ID: MDCA-5499-064)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0043, User: user97@contoso.com, SrcIP: 20.4.4.70, Location: Singapore, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>High-volume downloads from single user</li><li>Accessing many SharePoint sites</li><li>Downloads during normal hours</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where Application == "OneDrive"
+| summarize Downloads=count() by User, bin(TimeGenerated, 1h)</code></pre>
+  </details>
+  <p><strong>Context:</strong> New project migration; user was bulk-downloading approved data to work laptop.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Business-justified activity with ticket and manager approval.</p>
+  <p><strong>Remediation:</strong> None; document exception.</p>
+  <p><strong>Prevention:</strong> Temporary policy relaxation with DLP monitoring.</p>
+  <hr/>
+</section>
+
+<section id="scenario-065" class="scenario fp">
+  <h2>Scenario 065 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Suspicious OneDrive mass download <em>(Alert ID: MDCA-2320-065)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0014, User: user92@contoso.com, SrcIP: 20.4.4.170, Location: USA, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>High-volume downloads from single user</li><li>Accessing many SharePoint sites</li><li>Downloads during normal hours</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where Application == "OneDrive"
+| summarize Downloads=count() by User, bin(TimeGenerated, 1h)</code></pre>
+  </details>
+  <p><strong>Context:</strong> New project migration; user was bulk-downloading approved data to work laptop.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Business-justified activity with ticket and manager approval.</p>
+  <p><strong>Remediation:</strong> None; document exception.</p>
+  <p><strong>Prevention:</strong> Temporary policy relaxation with DLP monitoring.</p>
+  <hr/>
+</section>
+
+<section id="scenario-066" class="scenario tp">
+  <h2>Scenario 066 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> RDP from TOR exit node followed by suspicious process execution <em>(Alert ID: Sentinel-7678-066)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0027, User: user30@contoso.com, SrcIP: 20.4.6.40, Location: Germany, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>RDP login from IP in TOR exit node list</li><li>Immediate execution of adfind.exe and net.exe enumeration</li><li>Creation of new local admin user</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>Heartbeat
+| join kind=inner (SigninLogs | where AppDisplayName =~ "Azure Windows Sign-In") on Computer
+| join kind=inner (ThreatIntelligenceIndicator | where Description has "TOR") on $left.ClientIP == $right.NetworkIP
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> Exposed RDP service allowed inbound connections; attacker began recon immediately post-login.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Sequence of TOR sign-in + recon tooling is indicative of intrusion, not admin activity.</p>
+  <p><strong>Remediation:</strong> Disable external RDP, enforce VPN, remove rogue admin, hunt for persistence, rotate creds.</p>
+  <p><strong>Prevention:</strong> Just-in-time access; network layer filtering; restrict RDP via conditional access and Azure Bastion.</p>
+  <hr/>
+</section>
+
+<section id="scenario-067" class="scenario fp">
+  <h2>Scenario 067 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Office 365</p>
+  <p><strong>Alert:</strong> Phishing email detected (lookalike domain) <em>(Alert ID: MDO-1320-067)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-008B, User: user60@contoso.com, SrcIP: 20.4.6.120, Location: India, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Domain similarity score high</li><li>New sender domain observed</li><li>URL rewrites by Safe Links</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>EmailEvents
+| where SenderFromDomain endswith "partner-newdomain.com"
+| summarize by SenderFromAddress</code></pre>
+  </details>
+  <p><strong>Context:</strong> Partner launched rebranded domain; SPF/DKIM/DMARC valid; no malware detected in detonation.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Legitimate sender with new domain; security controls triggered heuristics.</p>
+  <p><strong>Remediation:</strong> Allow-list domain via policy after verification; monitor briefly.</p>
+  <p><strong>Prevention:</strong> Maintain approved sender registry; communicate partner domain changes.</p>
+  <hr/>
+</section>
+
+<section id="scenario-068" class="scenario fp">
+  <h2>Scenario 068 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> EDR detected Mimikatz string in memory <em>(Alert ID: MDE-9818-068)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0062, User: user62@contoso.com, SrcIP: 20.4.1.20, Location: UAE, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Memory scan flagged 'sekurlsa' string</li><li>Process was lsass dump attempt blocked</li><li>Event correlated with EDR test by red team</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceImageLoadEvents
+| where InitiatingProcessFileName has_any ("procdump.exe","rundll32.exe")
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> Scheduled red-team exercise performing detection validation.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Benign simulation; exercise ticket present.</p>
+  <p><strong>Remediation:</strong> Document test; retain telemetry for tuning validation.</p>
+  <p><strong>Prevention:</strong> Maintain red team IPs/tags; purple team cadence.</p>
+  <hr/>
+</section>
+
+<section id="scenario-069" class="scenario fp">
+  <h2>Scenario 069 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Suspicious OAuth app consent <em>(Alert ID: MDCA-6507-069)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0039, User: user63@contoso.com, SrcIP: 20.4.3.190, Location: Singapore, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>App requested Files.Read scope only</li><li>Verified publisher; internal IT created app</li><li>Consent during change window</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where ActionType == "OAuth2PermissionGrantAdded"
+| project TimeGenerated, User, Application, Scopes</code></pre>
+  </details>
+  <p><strong>Context:</strong> Internal integration for SharePoint search pilot.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Expected behavior; pre-approved app.</p>
+  <p><strong>Remediation:</strong> None.</p>
+  <p><strong>Prevention:</strong> Tag internal apps; maintain app catalog.</p>
+  <hr/>
+</section>
+
+<section id="scenario-070" class="scenario fp">
+  <h2>Scenario 070 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> Impossible travel sign-in <em>(Alert ID: Sentinel-1444-070)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-002B, User: user108@contoso.com, SrcIP: 20.4.7.60, Location: Germany, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Sign-ins from India then UK within 10 minutes</li><li>GeoIP database drift noted</li><li>Both sessions via corporate VPN POPs</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>SigninLogs
+| extend Country = tostring(LocationDetails.countryOrRegion)
+| summarize makeset(Country) by UserPrincipalName, bin(TimeGenerated, 10m)</code></pre>
+  </details>
+  <p><strong>Context:</strong> User connected via split-tunnel VPN; geo appears different due to egress POPs.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Benign VPN artifact; device compliance and MFA healthy.</p>
+  <p><strong>Remediation:</strong> None; mark as FP; update detection to account for VPN ranges.</p>
+  <p><strong>Prevention:</strong> Add VPN egress IPs to named locations in Conditional Access.</p>
+  <hr/>
+</section>
+
+<section id="scenario-071" class="scenario tp">
+  <h2>Scenario 071 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Identity</p>
+  <p><strong>Alert:</strong> Pass-the-Hash attack detected <em>(Alert ID: MDI-4467-071)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-006E, User: user18@contoso.com, SrcIP: 20.4.7.50, Location: Germany, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Abnormal NTLM authentication patterns</li><li>Lateral movement to multiple servers within minutes</li><li>Mismatch between device used and typical user workstation</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>// Investigate suspicious NTLM authentications via Sentinel
+SecurityAlert
+| where ProductName == "Azure Advanced Threat Protection"
+| where Title has "Pass-the-Hash"
+| project TimeGenerated, Entities</code></pre>
+  </details>
+  <p><strong>Context:</strong> Service account hash reused from compromised endpoint; rapid admin share access attempts observed.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Classic PtH behavior with credential reuse, anomalous device, and lateral movement sequence (T1550.002).</p>
+  <p><strong>Remediation:</strong> Invalidate Kerberos tickets, rotate service account credentials, isolate compromised host, enable SMB signing.</p>
+  <p><strong>Prevention:</strong> Enforce tiered admin model; restrict lateral movement; deploy LAPS/Privileged Access Workstations.</p>
+  <hr/>
+</section>
+
+<section id="scenario-072" class="scenario fp">
+  <h2>Scenario 072 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Suspicious OneDrive mass download <em>(Alert ID: MDCA-8705-072)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0054, User: user44@contoso.com, SrcIP: 20.4.6.30, Location: Singapore, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>High-volume downloads from single user</li><li>Accessing many SharePoint sites</li><li>Downloads during normal hours</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where Application == "OneDrive"
+| summarize Downloads=count() by User, bin(TimeGenerated, 1h)</code></pre>
+  </details>
+  <p><strong>Context:</strong> New project migration; user was bulk-downloading approved data to work laptop.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Business-justified activity with ticket and manager approval.</p>
+  <p><strong>Remediation:</strong> None; document exception.</p>
+  <p><strong>Prevention:</strong> Temporary policy relaxation with DLP monitoring.</p>
+  <hr/>
+</section>
+
+<section id="scenario-073" class="scenario tp">
+  <h2>Scenario 073 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> Suspicious PowerShell command detected <em>(Alert ID: MDE-1659-073)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-008B, User: user7@contoso.com, SrcIP: 20.4.5.140, Location: USA, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>PowerShell with obfuscation flags (-nop -w hidden -enc)</li><li>Network connection to known malicious IP</li><li>Child process: cmd.exe -> powershell.exe -> rundll32.exe</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceProcessEvents
+| where FileName =~ "powershell.exe" and ProcessCommandLine has_any ("-enc","-nop")
+| join kind=leftouter (DeviceNetworkEvents | where RemoteUrl has_any ("pastebin","bit.ly") or RemoteIP in ("185.199.110.153")) on DeviceId, InitiatingProcessId
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> User opened invoice.docm from external email; macro spawned obfuscated PowerShell that downloaded payload.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Matches known ransomware loader TTPs (T1059.001, T1105). Post-event beacons to C2 observed.</p>
+  <p><strong>Remediation:</strong> Isolated device via MDE, blocked indicators, initiated full AV scan, rotated credentials, and restored from backup.</p>
+  <p><strong>Prevention:</strong> Harden Office macro policies; enable ASR rules to block Office child processes; implement safe-links.</p>
+  <hr/>
+</section>
+
+<section id="scenario-074" class="scenario tp">
+  <h2>Scenario 074 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> Suspicious PowerShell command detected <em>(Alert ID: MDE-2874-074)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0040, User: user26@contoso.com, SrcIP: 20.4.1.60, Location: Germany, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>PowerShell with obfuscation flags (-nop -w hidden -enc)</li><li>Network connection to known malicious IP</li><li>Child process: cmd.exe -> powershell.exe -> rundll32.exe</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceProcessEvents
+| where FileName =~ "powershell.exe" and ProcessCommandLine has_any ("-enc","-nop")
+| join kind=leftouter (DeviceNetworkEvents | where RemoteUrl has_any ("pastebin","bit.ly") or RemoteIP in ("185.199.110.153")) on DeviceId, InitiatingProcessId
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> User opened invoice.docm from external email; macro spawned obfuscated PowerShell that downloaded payload.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Matches known ransomware loader TTPs (T1059.001, T1105). Post-event beacons to C2 observed.</p>
+  <p><strong>Remediation:</strong> Isolated device via MDE, blocked indicators, initiated full AV scan, rotated credentials, and restored from backup.</p>
+  <p><strong>Prevention:</strong> Harden Office macro policies; enable ASR rules to block Office child processes; implement safe-links.</p>
+  <hr/>
+</section>
+
+<section id="scenario-075" class="scenario fp">
+  <h2>Scenario 075 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> EDR detected Mimikatz string in memory <em>(Alert ID: MDE-2876-075)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0038, User: user60@contoso.com, SrcIP: 20.4.4.90, Location: UAE, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Memory scan flagged 'sekurlsa' string</li><li>Process was lsass dump attempt blocked</li><li>Event correlated with EDR test by red team</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceImageLoadEvents
+| where InitiatingProcessFileName has_any ("procdump.exe","rundll32.exe")
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> Scheduled red-team exercise performing detection validation.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Benign simulation; exercise ticket present.</p>
+  <p><strong>Remediation:</strong> Document test; retain telemetry for tuning validation.</p>
+  <p><strong>Prevention:</strong> Maintain red team IPs/tags; purple team cadence.</p>
+  <hr/>
+</section>
+
+<section id="scenario-076" class="scenario tp">
+  <h2>Scenario 076 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Office 365</p>
+  <p><strong>Alert:</strong> Malware delivered via Teams message link <em>(Alert ID: MDO-7498-076)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0050, User: user14@contoso.com, SrcIP: 20.4.8.160, Location: India, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Safe Links rewrote URL; post-click sandbox detonated file with high confidence malware verdict</li><li>Attachment hash matched known campaign</li><li>Secondary callback to known C2 domain</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>EmailUrlInfo
+| where UrlDomain has "sharepoint" or UrlDomain has "onedrive"
+| join kind=leftouter (ThreatIntelligenceIndicator) on $left.Url == $right.NetworkDestinationUrl</code></pre>
+  </details>
+  <p><strong>Context:</strong> User clicked Teams message, downloaded ISO containing LNK leading to DLL sideloading.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Detonation + callback + sideload chain confirms malicious payload delivery.</p>
+  <p><strong>Remediation:</strong> Quarantine artifacts, block indicators, reimage endpoint, user coaching.</p>
+  <p><strong>Prevention:</strong> Restrict ISO/LNK downloads; Teams Safe Links; application control (WDAC).</p>
+  <hr/>
+</section>
+
+<section id="scenario-077" class="scenario tp">
+  <h2>Scenario 077 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> Suspicious service installed for persistence <em>(Alert ID: MDE-2983-077)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0014, User: user76@contoso.com, SrcIP: 20.4.9.90, Location: USA, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>sc.exe create executed by non-admin user via UAC bypass</li><li>Service binary unsigned and living in user profile path</li><li>Service configured with restart-on-failure</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceProcessEvents
+| where FileName in ("sc.exe","services.exe")
+| where ProcessCommandLine has "create" and InitiatingProcessFileName != "services.exe"
+| project Timestamp, DeviceName, InitiatingProcessAccountName, ProcessCommandLine</code></pre>
+  </details>
+  <p><strong>Context:</strong> Post-exploitation persistence after initial phishing compromise.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Unsigned binary + user context + UAC bypass aligns with persistence T1543.003.</p>
+  <p><strong>Remediation:</strong> Remove service, delete binary, review autoruns, block hash, monitor re-creation.</p>
+  <p><strong>Prevention:</strong> Harden UAC; restrict service creation; enable ASR rules.</p>
+  <hr/>
+</section>
+
+<section id="scenario-078" class="scenario fp">
+  <h2>Scenario 078 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> EDR detected Mimikatz string in memory <em>(Alert ID: MDE-6590-078)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-000B, User: user45@contoso.com, SrcIP: 20.4.8.40, Location: Australia, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Memory scan flagged 'sekurlsa' string</li><li>Process was lsass dump attempt blocked</li><li>Event correlated with EDR test by red team</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceImageLoadEvents
+| where InitiatingProcessFileName has_any ("procdump.exe","rundll32.exe")
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> Scheduled red-team exercise performing detection validation.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Benign simulation; exercise ticket present.</p>
+  <p><strong>Remediation:</strong> Document test; retain telemetry for tuning validation.</p>
+  <p><strong>Prevention:</strong> Maintain red team IPs/tags; purple team cadence.</p>
+  <hr/>
+</section>
+
+<section id="scenario-079" class="scenario tp">
+  <h2>Scenario 079 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> Suspicious PowerShell command detected <em>(Alert ID: MDE-3506-079)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-006C, User: user106@contoso.com, SrcIP: 20.4.7.120, Location: UK, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>PowerShell with obfuscation flags (-nop -w hidden -enc)</li><li>Network connection to known malicious IP</li><li>Child process: cmd.exe -> powershell.exe -> rundll32.exe</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceProcessEvents
+| where FileName =~ "powershell.exe" and ProcessCommandLine has_any ("-enc","-nop")
+| join kind=leftouter (DeviceNetworkEvents | where RemoteUrl has_any ("pastebin","bit.ly") or RemoteIP in ("185.199.110.153")) on DeviceId, InitiatingProcessId
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> User opened invoice.docm from external email; macro spawned obfuscated PowerShell that downloaded payload.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Matches known ransomware loader TTPs (T1059.001, T1105). Post-event beacons to C2 observed.</p>
+  <p><strong>Remediation:</strong> Isolated device via MDE, blocked indicators, initiated full AV scan, rotated credentials, and restored from backup.</p>
+  <p><strong>Prevention:</strong> Harden Office macro policies; enable ASR rules to block Office child processes; implement safe-links.</p>
+  <hr/>
+</section>
+
+<section id="scenario-080" class="scenario fp">
+  <h2>Scenario 080 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> RDP brute force suspected on jump host <em>(Alert ID: MDE-8616-080)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-002E, User: user94@contoso.com, SrcIP: 20.4.8.10, Location: Singapore, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Multiple failed logons followed by success</li><li>Source IP from internal management subnet</li><li>Success via service account used by automation</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceLogonEvents
+| where ActionType in ("LogonFailed","LogonSuccess")
+| summarize Failed=countif(ActionType=="LogonFailed"), Success=countif(ActionType=="LogonSuccess") by DeviceName, AccountName, bin(Timestamp, 15m)</code></pre>
+  </details>
+  <p><strong>Context:</strong> Automated patching tool cycling credentials during rotation caused failures before success.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Planned maintenance activity; not malicious.</p>
+  <p><strong>Remediation:</strong> Tune to ignore service account auth storms during maintenance window.</p>
+  <p><strong>Prevention:</strong> Stagger rotations; improve tooling to reduce failures.</p>
+  <hr/>
+</section>
+
+<section id="scenario-081" class="scenario fp">
+  <h2>Scenario 081 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> RDP brute force suspected on jump host <em>(Alert ID: MDE-7209-081)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0045, User: user42@contoso.com, SrcIP: 20.4.4.60, Location: UK, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Multiple failed logons followed by success</li><li>Source IP from internal management subnet</li><li>Success via service account used by automation</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceLogonEvents
+| where ActionType in ("LogonFailed","LogonSuccess")
+| summarize Failed=countif(ActionType=="LogonFailed"), Success=countif(ActionType=="LogonSuccess") by DeviceName, AccountName, bin(Timestamp, 15m)</code></pre>
+  </details>
+  <p><strong>Context:</strong> Automated patching tool cycling credentials during rotation caused failures before success.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Planned maintenance activity; not malicious.</p>
+  <p><strong>Remediation:</strong> Tune to ignore service account auth storms during maintenance window.</p>
+  <p><strong>Prevention:</strong> Stagger rotations; improve tooling to reduce failures.</p>
+  <hr/>
+</section>
+
+<section id="scenario-082" class="scenario fp">
+  <h2>Scenario 082 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Office 365</p>
+  <p><strong>Alert:</strong> Phishing email detected (lookalike domain) <em>(Alert ID: MDO-6576-082)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0008, User: user64@contoso.com, SrcIP: 20.4.5.80, Location: Germany, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Domain similarity score high</li><li>New sender domain observed</li><li>URL rewrites by Safe Links</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>EmailEvents
+| where SenderFromDomain endswith "partner-newdomain.com"
+| summarize by SenderFromAddress</code></pre>
+  </details>
+  <p><strong>Context:</strong> Partner launched rebranded domain; SPF/DKIM/DMARC valid; no malware detected in detonation.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Legitimate sender with new domain; security controls triggered heuristics.</p>
+  <p><strong>Remediation:</strong> Allow-list domain via policy after verification; monitor briefly.</p>
+  <p><strong>Prevention:</strong> Maintain approved sender registry; communicate partner domain changes.</p>
+  <hr/>
+</section>
+
+<section id="scenario-083" class="scenario tp">
+  <h2>Scenario 083 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Identity</p>
+  <p><strong>Alert:</strong> Kerberoasting attempt detected <em>(Alert ID: MDI-9004-083)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0047, User: user72@contoso.com, SrcIP: 20.4.1.30, Location: USA, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Abnormal spike in Kerberos service ticket requests (TGS)</li><li>Requests target SPNs with weak encryption types</li><li>Hashcat-style requests observed</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>SecurityAlert
+| where ProductName has "Defender for Identity" and Title has "Kerberoasting"
+| project TimeGenerated, Title, Description, Entities</code></pre>
+  </details>
+  <p><strong>Context:</strong> Attacker enumerating SPNs to crack service account hashes offline.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Clear TGS spam and weak cipher targeting.</p>
+  <p><strong>Remediation:</strong> Rotate service account passwords to 25+ chars, RC4 disabled, monitor DCs.</p>
+  <p><strong>Prevention:</strong> Managed service accounts; disable unconstrained delegation; enforce AES-only.</p>
+  <hr/>
+</section>
+
+<section id="scenario-084" class="scenario fp">
+  <h2>Scenario 084 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Suspicious OAuth app consent <em>(Alert ID: MDCA-4630-084)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-003E, User: user89@contoso.com, SrcIP: 20.4.7.80, Location: Canada, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>App requested Files.Read scope only</li><li>Verified publisher; internal IT created app</li><li>Consent during change window</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where ActionType == "OAuth2PermissionGrantAdded"
+| project TimeGenerated, User, Application, Scopes</code></pre>
+  </details>
+  <p><strong>Context:</strong> Internal integration for SharePoint search pilot.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Expected behavior; pre-approved app.</p>
+  <p><strong>Remediation:</strong> None.</p>
+  <p><strong>Prevention:</strong> Tag internal apps; maintain app catalog.</p>
+  <hr/>
+</section>
+
+<section id="scenario-085" class="scenario fp">
+  <h2>Scenario 085 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> Impossible travel sign-in <em>(Alert ID: Sentinel-7971-085)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-003F, User: user40@contoso.com, SrcIP: 20.4.9.180, Location: UAE, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Sign-ins from India then UK within 10 minutes</li><li>GeoIP database drift noted</li><li>Both sessions via corporate VPN POPs</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>SigninLogs
+| extend Country = tostring(LocationDetails.countryOrRegion)
+| summarize makeset(Country) by UserPrincipalName, bin(TimeGenerated, 10m)</code></pre>
+  </details>
+  <p><strong>Context:</strong> User connected via split-tunnel VPN; geo appears different due to egress POPs.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Benign VPN artifact; device compliance and MFA healthy.</p>
+  <p><strong>Remediation:</strong> None; mark as FP; update detection to account for VPN ranges.</p>
+  <p><strong>Prevention:</strong> Add VPN egress IPs to named locations in Conditional Access.</p>
+  <hr/>
+</section>
+
+<section id="scenario-086" class="scenario fp">
+  <h2>Scenario 086 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Cloud Apps</p>
+  <p><strong>Alert:</strong> Suspicious OAuth app consent <em>(Alert ID: MDCA-4155-086)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0055, User: user46@contoso.com, SrcIP: 20.4.7.30, Location: Singapore, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>App requested Files.Read scope only</li><li>Verified publisher; internal IT created app</li><li>Consent during change window</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>CloudAppEvents
+| where ActionType == "OAuth2PermissionGrantAdded"
+| project TimeGenerated, User, Application, Scopes</code></pre>
+  </details>
+  <p><strong>Context:</strong> Internal integration for SharePoint search pilot.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Expected behavior; pre-approved app.</p>
+  <p><strong>Remediation:</strong> None.</p>
+  <p><strong>Prevention:</strong> Tag internal apps; maintain app catalog.</p>
+  <hr/>
+</section>
+
+<section id="scenario-087" class="scenario fp">
+  <h2>Scenario 087 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Office 365</p>
+  <p><strong>Alert:</strong> Phishing email detected (lookalike domain) <em>(Alert ID: MDO-5530-087)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-001F, User: user96@contoso.com, SrcIP: 20.4.8.50, Location: Germany, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Domain similarity score high</li><li>New sender domain observed</li><li>URL rewrites by Safe Links</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>EmailEvents
+| where SenderFromDomain endswith "partner-newdomain.com"
+| summarize by SenderFromAddress</code></pre>
+  </details>
+  <p><strong>Context:</strong> Partner launched rebranded domain; SPF/DKIM/DMARC valid; no malware detected in detonation.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Legitimate sender with new domain; security controls triggered heuristics.</p>
+  <p><strong>Remediation:</strong> Allow-list domain via policy after verification; monitor briefly.</p>
+  <p><strong>Prevention:</strong> Maintain approved sender registry; communicate partner domain changes.</p>
+  <hr/>
+</section>
+
+<section id="scenario-088" class="scenario fp">
+  <h2>Scenario 088 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Endpoint</p>
+  <p><strong>Alert:</strong> EDR detected Mimikatz string in memory <em>(Alert ID: MDE-3939-088)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0087, User: user77@contoso.com, SrcIP: 20.4.4.160, Location: UK, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Memory scan flagged 'sekurlsa' string</li><li>Process was lsass dump attempt blocked</li><li>Event correlated with EDR test by red team</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DeviceImageLoadEvents
+| where InitiatingProcessFileName has_any ("procdump.exe","rundll32.exe")
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> Scheduled red-team exercise performing detection validation.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Benign simulation; exercise ticket present.</p>
+  <p><strong>Remediation:</strong> Document test; retain telemetry for tuning validation.</p>
+  <p><strong>Prevention:</strong> Maintain red team IPs/tags; purple team cadence.</p>
+  <hr/>
+</section>
+
+<section id="scenario-089" class="scenario tp">
+  <h2>Scenario 089 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> Suspicious Azure automation account runbook modification <em>(Alert ID: Sentinel-5786-089)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0004, User: user91@contoso.com, SrcIP: 20.4.8.40, Location: Germany, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Runbook updated outside maintenance window</li><li>Webhook created to external endpoint</li><li>Execution frequency increased abruptly</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>AzureActivity
+| where OperationNameValue has "MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/RUNBOOKS/WRITE"
+| project TimeGenerated, Caller, ResourceGroup, Resource, ActivityStatusValue</code></pre>
+  </details>
+  <p><strong>Context:</strong> Cloud persistence via modified runbook to exfiltration endpoint.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Abuse of automation accounts for data exfil and scheduled tasks.</p>
+  <p><strong>Remediation:</strong> Revert runbook, rotate keys, remove webhooks, review RBAC, audit activity.</p>
+  <p><strong>Prevention:</strong> Privileged access policies; alert on webhook creation; change management.</p>
+  <hr/>
+</section>
+
+<section id="scenario-090" class="scenario tp">
+  <h2>Scenario 090 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> RDP from TOR exit node followed by suspicious process execution <em>(Alert ID: Sentinel-4020-090)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-007E, User: user14@contoso.com, SrcIP: 20.4.1.40, Location: Singapore, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>RDP login from IP in TOR exit node list</li><li>Immediate execution of adfind.exe and net.exe enumeration</li><li>Creation of new local admin user</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>Heartbeat
+| join kind=inner (SigninLogs | where AppDisplayName =~ "Azure Windows Sign-In") on Computer
+| join kind=inner (ThreatIntelligenceIndicator | where Description has "TOR") on $left.ClientIP == $right.NetworkIP
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> Exposed RDP service allowed inbound connections; attacker began recon immediately post-login.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Sequence of TOR sign-in + recon tooling is indicative of intrusion, not admin activity.</p>
+  <p><strong>Remediation:</strong> Disable external RDP, enforce VPN, remove rogue admin, hunt for persistence, rotate creds.</p>
+  <p><strong>Prevention:</strong> Just-in-time access; network layer filtering; restrict RDP via conditional access and Azure Bastion.</p>
+  <hr/>
+</section>
+
+<section id="scenario-091" class="scenario tp">
+  <h2>Scenario 091 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> Multiple failed MFA prompts followed by successful sign-in <em>(Alert ID: Sentinel-1878-091)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0041, User: user111@contoso.com, SrcIP: 20.4.7.90, Location: UK, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Unusual MFA push frequency (over 20 in 10 minutes)</li><li>Successful sign-in from previously unseen IP/asn</li><li>Risky sign-in flagged by Entra ID Protection</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>SigninLogs
+| where ResultType == "0" or ResultType == 0
+| extend IsNewIP = iff(ClientIP notin (todynamic(PreviousIPs)), true, false)
+| where IsNewIP and AuthenticationRequirement =~ "multiFactorAuthentication"
+| summarize count() by UserPrincipalName, bin(TimeGenerated, 5m)</code></pre>
+  </details>
+  <p><strong>Context:</strong> User reported MFA fatigue; attacker obtained password via phishing and spammed MFA until user approved.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Chain of events and telemetry indicate account takeover via MFA fatigue attack.</p>
+  <p><strong>Remediation:</strong> Reset password, revoke refresh tokens, force sign-out, register phishing-resistant MFA, review mailbox rules.</p>
+  <p><strong>Prevention:</strong> Enable number matching; conditional access with sign-in risk; implement phishing-resistant methods (FIDO2).</p>
+  <hr/>
+</section>
+
+<section id="scenario-092" class="scenario tp">
+  <h2>Scenario 092 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> RDP from TOR exit node followed by suspicious process execution <em>(Alert ID: Sentinel-7818-092)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0027, User: user104@contoso.com, SrcIP: 20.4.8.120, Location: Singapore, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>RDP login from IP in TOR exit node list</li><li>Immediate execution of adfind.exe and net.exe enumeration</li><li>Creation of new local admin user</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>Heartbeat
+| join kind=inner (SigninLogs | where AppDisplayName =~ "Azure Windows Sign-In") on Computer
+| join kind=inner (ThreatIntelligenceIndicator | where Description has "TOR") on $left.ClientIP == $right.NetworkIP
+| take 50</code></pre>
+  </details>
+  <p><strong>Context:</strong> Exposed RDP service allowed inbound connections; attacker began recon immediately post-login.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Sequence of TOR sign-in + recon tooling is indicative of intrusion, not admin activity.</p>
+  <p><strong>Remediation:</strong> Disable external RDP, enforce VPN, remove rogue admin, hunt for persistence, rotate creds.</p>
+  <p><strong>Prevention:</strong> Just-in-time access; network layer filtering; restrict RDP via conditional access and Azure Bastion.</p>
+  <hr/>
+</section>
+
+<section id="scenario-093" class="scenario fp">
+  <h2>Scenario 093 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> Anomalous DNS tunneling volume <em>(Alert ID: Sentinel-8025-093)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-003A, User: user100@contoso.com, SrcIP: 20.4.8.10, Location: Australia, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>High TXT query rate</li><li>Domains match internal test lab</li><li>Origin from lab subnet</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>DnsEvents
+| where QueryType == "TXT"
+| summarize count() by ClientIP, bin(TimeGenerated, 5m)</code></pre>
+  </details>
+  <p><strong>Context:</strong> Network team performing approved tunneling test in lab.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Authorized experiment; outside production network.</p>
+  <p><strong>Remediation:</strong> None.</p>
+  <p><strong>Prevention:</strong> Label lab ranges; exclude from production detections.</p>
+  <hr/>
+</section>
+
+<section id="scenario-094" class="scenario tp">
+  <h2>Scenario 094 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> Suspicious Azure automation account runbook modification <em>(Alert ID: Sentinel-2330-094)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0092, User: user80@contoso.com, SrcIP: 20.4.1.160, Location: UK, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Runbook updated outside maintenance window</li><li>Webhook created to external endpoint</li><li>Execution frequency increased abruptly</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>AzureActivity
+| where OperationNameValue has "MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/RUNBOOKS/WRITE"
+| project TimeGenerated, Caller, ResourceGroup, Resource, ActivityStatusValue</code></pre>
+  </details>
+  <p><strong>Context:</strong> Cloud persistence via modified runbook to exfiltration endpoint.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Abuse of automation accounts for data exfil and scheduled tasks.</p>
+  <p><strong>Remediation:</strong> Revert runbook, rotate keys, remove webhooks, review RBAC, audit activity.</p>
+  <p><strong>Prevention:</strong> Privileged access policies; alert on webhook creation; change management.</p>
+  <hr/>
+</section>
+
+<section id="scenario-095" class="scenario tp">
+  <h2>Scenario 095 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Office 365</p>
+  <p><strong>Alert:</strong> Malware delivered via Teams message link <em>(Alert ID: MDO-8699-095)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-003E, User: user23@contoso.com, SrcIP: 20.4.8.90, Location: UK, Domain: contoso.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Safe Links rewrote URL; post-click sandbox detonated file with high confidence malware verdict</li><li>Attachment hash matched known campaign</li><li>Secondary callback to known C2 domain</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>EmailUrlInfo
+| where UrlDomain has "sharepoint" or UrlDomain has "onedrive"
+| join kind=leftouter (ThreatIntelligenceIndicator) on $left.Url == $right.NetworkDestinationUrl</code></pre>
+  </details>
+  <p><strong>Context:</strong> User clicked Teams message, downloaded ISO containing LNK leading to DLL sideloading.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Detonation + callback + sideload chain confirms malicious payload delivery.</p>
+  <p><strong>Remediation:</strong> Quarantine artifacts, block indicators, reimage endpoint, user coaching.</p>
+  <p><strong>Prevention:</strong> Restrict ISO/LNK downloads; Teams Safe Links; application control (WDAC).</p>
+  <hr/>
+</section>
+
+<section id="scenario-096" class="scenario tp">
+  <h2>Scenario 096 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> Suspicious Azure automation account runbook modification <em>(Alert ID: Sentinel-4824-096)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0009, User: user30@contoso.com, SrcIP: 20.4.4.170, Location: Singapore, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Runbook updated outside maintenance window</li><li>Webhook created to external endpoint</li><li>Execution frequency increased abruptly</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>AzureActivity
+| where OperationNameValue has "MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/RUNBOOKS/WRITE"
+| project TimeGenerated, Caller, ResourceGroup, Resource, ActivityStatusValue</code></pre>
+  </details>
+  <p><strong>Context:</strong> Cloud persistence via modified runbook to exfiltration endpoint.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Abuse of automation accounts for data exfil and scheduled tasks.</p>
+  <p><strong>Remediation:</strong> Revert runbook, rotate keys, remove webhooks, review RBAC, audit activity.</p>
+  <p><strong>Prevention:</strong> Privileged access policies; alert on webhook creation; change management.</p>
+  <hr/>
+</section>
+
+<section id="scenario-097" class="scenario tp">
+  <h2>Scenario 097 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Identity</p>
+  <p><strong>Alert:</strong> Kerberoasting attempt detected <em>(Alert ID: MDI-3330-097)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0033, User: user55@contoso.com, SrcIP: 20.4.2.110, Location: USA, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Abnormal spike in Kerberos service ticket requests (TGS)</li><li>Requests target SPNs with weak encryption types</li><li>Hashcat-style requests observed</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>SecurityAlert
+| where ProductName has "Defender for Identity" and Title has "Kerberoasting"
+| project TimeGenerated, Title, Description, Entities</code></pre>
+  </details>
+  <p><strong>Context:</strong> Attacker enumerating SPNs to crack service account hashes offline.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Clear TGS spam and weak cipher targeting.</p>
+  <p><strong>Remediation:</strong> Rotate service account passwords to 25+ chars, RC4 disabled, monitor DCs.</p>
+  <p><strong>Prevention:</strong> Managed service accounts; disable unconstrained delegation; enforce AES-only.</p>
+  <hr/>
+</section>
+
+<section id="scenario-098" class="scenario tp">
+  <h2>Scenario 098 — True Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Identity</p>
+  <p><strong>Alert:</strong> Pass-the-Hash attack detected <em>(Alert ID: MDI-5982-098)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0010, User: user22@contoso.com, SrcIP: 20.4.5.30, Location: Singapore, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Abnormal NTLM authentication patterns</li><li>Lateral movement to multiple servers within minutes</li><li>Mismatch between device used and typical user workstation</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>// Investigate suspicious NTLM authentications via Sentinel
+SecurityAlert
+| where ProductName == "Azure Advanced Threat Protection"
+| where Title has "Pass-the-Hash"
+| project TimeGenerated, Entities</code></pre>
+  </details>
+  <p><strong>Context:</strong> Service account hash reused from compromised endpoint; rapid admin share access attempts observed.</p>
+  <p><strong>Classification:</strong> True Positive</p>
+  <p><strong>Reason:</strong> Classic PtH behavior with credential reuse, anomalous device, and lateral movement sequence (T1550.002).</p>
+  <p><strong>Remediation:</strong> Invalidate Kerberos tickets, rotate service account credentials, isolate compromised host, enable SMB signing.</p>
+  <p><strong>Prevention:</strong> Enforce tiered admin model; restrict lateral movement; deploy LAPS/Privileged Access Workstations.</p>
+  <hr/>
+</section>
+
+<section id="scenario-099" class="scenario fp">
+  <h2>Scenario 099 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Sentinel</p>
+  <p><strong>Alert:</strong> Impossible travel sign-in <em>(Alert ID: Sentinel-8078-099)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0046, User: user65@contoso.com, SrcIP: 20.4.8.60, Location: Canada, Domain: fabrikam.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Sign-ins from India then UK within 10 minutes</li><li>GeoIP database drift noted</li><li>Both sessions via corporate VPN POPs</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>SigninLogs
+| extend Country = tostring(LocationDetails.countryOrRegion)
+| summarize makeset(Country) by UserPrincipalName, bin(TimeGenerated, 10m)</code></pre>
+  </details>
+  <p><strong>Context:</strong> User connected via split-tunnel VPN; geo appears different due to egress POPs.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Benign VPN artifact; device compliance and MFA healthy.</p>
+  <p><strong>Remediation:</strong> None; mark as FP; update detection to account for VPN ranges.</p>
+  <p><strong>Prevention:</strong> Add VPN egress IPs to named locations in Conditional Access.</p>
+  <hr/>
+</section>
+
+<section id="scenario-100" class="scenario fp">
+  <h2>Scenario 100 — False Positive</h2>
+  <p><strong>Tool:</strong> Microsoft Defender for Office 365</p>
+  <p><strong>Alert:</strong> Phishing email detected (lookalike domain) <em>(Alert ID: MDO-5415-100)</em></p>
+  <p><strong>Primary Entities:</strong> Host: WIN-0041, User: user4@contoso.com, SrcIP: 20.4.2.50, Location: USA, Domain: adatum.com</p>
+  <details><summary><strong>Evidence</strong></summary>
+    <ul>
+      <li>Domain similarity score high</li><li>New sender domain observed</li><li>URL rewrites by Safe Links</li>
+    </ul>
+  </details>
+  <details><summary><strong>Investigation (KQL)</strong></summary>
+    <pre><code>EmailEvents
+| where SenderFromDomain endswith "partner-newdomain.com"
+| summarize by SenderFromAddress</code></pre>
+  </details>
+  <p><strong>Context:</strong> Partner launched rebranded domain; SPF/DKIM/DMARC valid; no malware detected in detonation.</p>
+  <p><strong>Classification:</strong> False Positive</p>
+  <p><strong>Reason:</strong> Legitimate sender with new domain; security controls triggered heuristics.</p>
+  <p><strong>Remediation:</strong> Allow-list domain via policy after verification; monitor briefly.</p>
+  <p><strong>Prevention:</strong> Maintain approved sender registry; communicate partner domain changes.</p>
+  <hr/>
+</section>
+
+  </section>
+</main>
+<footer>
+  &copy; 2025 Training Scenarios for Copilot. For internal enablement and education only.
+</footer>
+</body>
+</html>
